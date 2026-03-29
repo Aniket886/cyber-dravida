@@ -177,9 +177,9 @@ const Contact = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" size="lg" className="w-full glow-btn gap-2">
-                  <Send className="h-4 w-4" />
-                  Send Message
+                <Button type="submit" size="lg" className="w-full glow-btn gap-2" disabled={loading}>
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                  {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </Form>
