@@ -1,10 +1,21 @@
 
 
-## Add README.md and DEPLOYMENT.md to Project
+## Redesign Custom Cursor
 
-### Steps
+### Problem
+The current cursor is a small 8px dot with CSS transition-based tracking, which feels laggy and unresponsive.
 
-1. **Copy `README.md`** from uploaded file to the project root, replacing the existing placeholder README
-2. **Copy `DEPLOYMENT.md`** from uploaded file to the project root
-3. **Create `.env.example`** — referenced in the README but doesn't exist yet. Add it with `VITE_GROQ_API_KEY=your_groq_api_key_here` (no real key)
+### New Design
+Replace with a dual-ring cursor using `requestAnimationFrame` for smooth tracking:
+
+- **Inner dot** (6px): Snaps instantly to mouse position, solid indigo
+- **Outer ring** (32px): Follows with smooth lerp (linear interpolation), hollow indigo border that expands on hover over interactive elements
+- Use `useRef` + `requestAnimationFrame` instead of `setState` for zero-lag updates
+- Detect hovering over clickable elements (`a, button, [role=button]`) to scale up the outer ring
+- Hide default cursor via CSS `cursor: none` on body (desktop only)
+- Skip entirely on touch devices
+
+### Changes
+1. **Rewrite `src/components/CustomCursor.tsx`** — RAF-based dual cursor with lerp tracking
+2. **Update `src/index.css`** — Add `cursor: none` on `body` for non-touch devices via `@media (hover: hover)`
 
