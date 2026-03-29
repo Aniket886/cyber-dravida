@@ -138,6 +138,7 @@ const Contact = () => {
           <motion.div {...fadeUp(0.2)} className="bg-card border border-border rounded-xl p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
                 <FormField
                   control={form.control}
                   name="name"
