@@ -37,7 +37,7 @@ const LoadingScreen = ({ onDone }: { onDone: () => void }) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <Shield className="h-14 w-14 text-primary mb-4" />
+          <img src="/CDTRANS.png" alt="Cyber Dravida" className="h-28 w-28 object-contain animate-pulse mb-4" />
           <h1 className="font-heading text-2xl font-bold text-heading mb-6">
             Cyber Dravida
           </h1>

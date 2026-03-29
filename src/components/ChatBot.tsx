@@ -89,7 +89,7 @@ const ChatBot = () => {
           >
             {/* Header */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card">
-              <Shield size={20} className="text-primary" />
+              <img src="/CDTRANS.png" alt="Dravida AI" className="h-7 w-7 object-contain" />
               <div className="flex-1">
                 <p className="text-sm font-bold font-heading text-foreground">Dravida AI</p>
                 <p className="text-[11px] text-muted-foreground">Cybersecurity Assistant</p>
