@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Globe, Instagram, Linkedin, Twitter, Send } from "lucide-react";
+import { Mail, MapPin, Globe, Instagram, Linkedin, Twitter, Send, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,14 +38,38 @@ const socials = [
 ];
 
 const Contact = () => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
   });
 
-  const onSubmit = (_data: ContactForm) => {
-    toast({ title: "Message sent!", description: "We'll get back to you soon." });
-    form.reset();
+  const onSubmit = async (data: ContactForm) => {
+    setLoading(true);
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "4778d335-d991-4bb0-9e1c-40a995012eda",
+          subject: "New Contact from Cyber Dravida Website",
+          name: data.name,
+          email: data.email,
+          message: data.message,
+        }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        toast({ title: "Message sent!", description: "We'll get back to you soon." });
+        form.reset();
+      } else {
+        toast({ title: "Failed to send", description: "Please try again later.", variant: "destructive" });
+      }
+    } catch {
+      toast({ title: "Network error", description: "Please check your connection.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -152,9 +177,9 @@ const Contact = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" size="lg" className="w-full glow-btn gap-2">
-                  <Send className="h-4 w-4" />
-                  Send Message
+                <Button type="submit" size="lg" className="w-full glow-btn gap-2" disabled={loading}>
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                  {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </Form>
