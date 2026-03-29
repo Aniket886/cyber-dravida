@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Globe, Instagram, Linkedin, Twitter, Send } from "lucide-react";
+import { Mail, MapPin, Globe, Instagram, Linkedin, Twitter, Send, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
