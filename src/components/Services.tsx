@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Zap, Radio, Flag, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 
 const services = [
@@ -7,24 +8,28 @@ const services = [
     icon: Zap,
     color: "text-secondary",
     title: "Cybersecurity Training",
+    slug: "cybersecurity-training",
     desc: "Structured courses covering ethical hacking, OSINT, network security, and digital forensics — from beginner to advanced.",
   },
   {
     icon: Radio,
     color: "text-primary",
     title: "Awareness Outreach",
+    slug: "awareness-outreach",
     desc: "Campus workshops, seminars, and awareness drives to educate students and institutions about cyber threats.",
   },
   {
     icon: Flag,
     color: "text-destructive",
     title: "CTF Competitions",
+    slug: "ctf-competitions",
     desc: "Participate in Capture the Flag challenges designed to sharpen your offensive and defensive security skills.",
   },
   {
     icon: Search,
     color: "text-secondary",
     title: "OSINT & Investigation",
+    slug: "osint-investigation",
     desc: "Learn open-source intelligence gathering and cyber crime investigation techniques used by real analysts.",
   },
 ];
@@ -65,9 +70,9 @@ const Services = () => {
                   <p className="text-foreground/60 text-sm leading-relaxed">
                     {s.desc}
                   </p>
-                  <span className="text-primary text-sm font-medium inline-block">
+                  <Link to={`/services/${s.slug}`} className="text-primary text-sm font-medium inline-block hover:underline">
                     Learn More →
-                  </span>
+                  </Link>
                 </CardContent>
               </Card>
             </motion.div>
