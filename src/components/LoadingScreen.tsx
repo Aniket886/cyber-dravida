@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield } from "lucide-react";
+
 import { Progress } from "@/components/ui/progress";
 import { useState, useEffect } from "react";
 
