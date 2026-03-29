@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LoadingScreen from "@/components/LoadingScreen";
 import CustomCursor from "@/components/CustomCursor";
+import { Analytics } from "@vercel/analytics/react";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        <Analytics />
       </TooltipProvider>
     </QueryClientProvider>
   );
