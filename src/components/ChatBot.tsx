@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 type Message = { role: "user" | "assistant"; content: string };
 
 const MAX_MESSAGE_LENGTH = 500;
+const STORAGE_KEY = "dravida-ai-chat";
 
 const INITIAL_MESSAGE: Message = {
   role: "assistant",
@@ -15,16 +16,43 @@ const INITIAL_MESSAGE: Message = {
     "Hey! 👋 I'm Dravida AI, your cybersecurity guide. Ask me anything about ethical hacking, OSINT, staying safe online, or Cyber Dravida's programs!",
 };
 
+function loadMessages(): Message[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  return [INITIAL_MESSAGE];
+}
+
+function saveMessages(msgs: Message[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
+  } catch {}
+}
+
 const ChatBot = () => {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
+  const [messages, setMessages] = useState<Message[]>(loadMessages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Persist messages to localStorage
+  useEffect(() => {
+    saveMessages(messages);
+  }, [messages]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  const clearChat = () => {
+    setMessages([INITIAL_MESSAGE]);
+    localStorage.removeItem(STORAGE_KEY);
+  };
 
   const sendMessage = async () => {
     const text = input.trim().slice(0, MAX_MESSAGE_LENGTH);
@@ -105,6 +133,14 @@ const ChatBot = () => {
                 <p className="text-sm font-bold font-heading text-foreground">Dravida AI</p>
                 <p className="text-[11px] text-muted-foreground">Cybersecurity Assistant</p>
               </div>
+              <button
+                onClick={clearChat}
+                className="text-muted-foreground hover:text-destructive transition-colors mr-1"
+                aria-label="Clear chat"
+                title="Clear chat"
+              >
+                <Trash2 size={16} />
+              </button>
               <button
                 onClick={() => setOpen(false)}
                 className="text-muted-foreground hover:text-foreground transition-colors"
