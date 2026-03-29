@@ -1,63 +1,50 @@
 
 
-## Create Service Detail Subpages with Guides, Glossary & Roadmaps
+## Enrich Dravida AI System Prompt with Full Website Knowledge
 
-### Overview
-Create 4 dedicated subpages for each service, linked from the "Learn More →" buttons. Each page includes detailed info, curated resource links, a learning roadmap, and a glossary. A shared layout component keeps styling consistent.
+### Problem
+The chatbot's system prompt only has a one-line description of Cyber Dravida. When users ask about services, courses, pricing, events, team, or blog content, the AI can't answer accurately because it doesn't know this information.
 
-### Files to Create
+### Solution
+Expand the `SYSTEM_PROMPT` in `api/chat.ts` to include a comprehensive knowledge base of all frontend content — services, courses with prices and links, events, team info, stats, blog topics, and contact details. No code or API key info will be included.
 
-**1. `src/data/servicePages.ts`** — Central data file with all content for the 4 services:
-- Each entry: `slug`, `title`, `icon`, `color`, `heroDescription`, `sections` (What You'll Learn, Who It's For, Key Topics), `resources` (name + URL pairs to external guides/tools), `roadmap` (ordered steps with title + description), `glossary` (term + definition pairs)
-- Content covers:
-  - **Cybersecurity Training** (`/services/cybersecurity-training`): ethical hacking basics, network security, digital forensics, certifications (CEH, CompTIA), links to TryHackMe, HackTheBox, OWASP, roadmap from basics to advanced pentesting
-  - **Awareness Outreach** (`/services/awareness-outreach`): social engineering, phishing, password hygiene, campus workshop info, links to NIST, SANS awareness resources, roadmap for organizing awareness programs
-  - **CTF Competitions** (`/services/ctf-competitions`): what CTFs are, categories (web, crypto, pwn, forensics, misc), how to get started, links to CTFtime, PicoCTF, OverTheWire, roadmap from beginner wargames to competitive CTFs
-  - **OSINT & Investigation** (`/services/osint-investigation`): OSINT framework, tools (Maltego, Shodan, theHarvester), investigation methodology, links to OSINT Framework site, IntelTechniques, roadmap from Google dorking to advanced profiling
+### Changes — `api/chat.ts` only
 
-**2. `src/components/ServicePageLayout.tsx`** — Shared layout component used by all 4 pages:
-- Back button (Link to `/#services`)
-- Hero section with icon, title, description
-- Tabbed sections using existing `Tabs` component: Overview | Resources | Roadmap | Glossary
-- **Overview tab**: detailed paragraphs, key topics as badge chips, "Who It's For" section
-- **Resources tab**: grid of external link cards (open in new tab) with name + description
-- **Roadmap tab**: vertical timeline/stepper showing learning path stages
-- **Glossary tab**: alphabetically sorted terms using `Accordion` component
-- Footer at bottom
-- Same dark theme, fonts, animations as main site
+Update the `SYSTEM_PROMPT` constant to include:
 
-**3. `src/pages/ServicePage.tsx`** — Route page component:
-- Reads `slug` from URL params via `useParams`
-- Looks up data from `servicePages.ts`
-- Renders `ServicePageLayout` with the data
-- Shows `NotFound` if slug doesn't match
+**About**: Karnataka-based org founded Sep 2025 by Aniket Tegginamath (CEH, TryHackMe Top 1%, OSINT Researcher). Mission: close cybersecurity awareness gap in Tier-2 India.
 
-### Files to Modify
+**Services** (with subpage links):
+- Cybersecurity Training → /services/cybersecurity-training
+- Awareness Outreach → /services/awareness-outreach
+- CTF Competitions → /services/ctf-competitions
+- OSINT & Investigation → /services/osint-investigation
 
-**4. `src/App.tsx`** — Add route:
-```
-<Route path="/services/:slug" element={<ServicePage />} />
-```
+**Courses & Products** (with Topmate links and prices):
+- Featured: Advanced OSINT Investigation Course — ₹4,999 (topmate.io/cyberdravida/1411837)
+- Android Hacking 101 — ₹2,999
+- Professional Credential Recovery Tool — ₹999
+- Data Recovery from HDD/SSD/Pendrive — ₹699
+- Android Gallery Analysis — ₹666
+- 1:1 Cyber Career Roadmap (10-min call, Kannada/Hindi) — ₹99
 
-**5. `src/components/Services.tsx`** — Make "Learn More →" a real link:
-- Add `slug` field to each service object
-- Replace `<span>Learn More →</span>` with `<Link to={/services/${s.slug}} className="...">Learn More →</Link>`
-- Import `Link` from `react-router-dom`
+**Events**:
+- Upcoming: Cyber Awareness Workshop (Apr 2026, GM University Davangere)
+- Upcoming: CTF Challenge — Dravida Cup (May 2026, Online)
+- Past: Cybersecurity Orientation (Oct 2025, Davangere)
 
-**6. `src/components/Navbar.tsx`** — No changes needed (Services already links to `#services` section on homepage)
+**Stats**: 500+ students trained, 10+ events, 5+ colleges, 1 year active
 
-### Content Depth Per Page
-Each page will have:
-- 3-4 detailed paragraphs in overview
-- 6-8 key topic badges
-- 6-10 curated external resource links (real URLs to TryHackMe, HackTheBox, OWASP, CTFtime, PicoCTF, SANS, NIST, etc.)
-- 5-7 roadmap stages with descriptions
-- 10-15 glossary terms with definitions
+**Team**: Aniket Tegginamath — Founder & Lead Researcher. Tags: CEH, OSINT, TryHackMe Top 1%, CCI, Ethical Hacking Mentor. Links: LinkedIn (linkedin.com/in/aniket-tegginamath), TryHackMe (tryhackme.com/p/D4rkMatrix), Linktree (linktr.ee/anikettegginamath)
 
-### Design Details
-- Uses existing UI components: `Tabs`, `Accordion`, `Card`, `Badge`, `Button`
-- Same `circuit-bg` background, same color scheme
-- Scroll to top on page load
-- Fully responsive (single column on mobile, grid on desktop for resources)
-- All external links open in new tabs
+**Blog topics**: OSINT tools, TryHackMe journey, phishing evolution (linked to Medium: medium.com/@anikettegginamath)
+
+**Contact**: cyberdravida@gmail.com, website: cyberdravida.in
+
+**Values**: Awareness First, Practical Training, Community Driven, Karnataka Focused
+
+The prompt will instruct the AI to answer any question about the website content accurately and provide relevant Topmate/service links when asked about courses or enrollment.
+
+### Files Changed
+- `api/chat.ts` — Expand `SYSTEM_PROMPT` with full website knowledge base
 
