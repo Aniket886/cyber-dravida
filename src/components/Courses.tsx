@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { Check, Star, Users, Quote, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
@@ -82,6 +84,34 @@ const products = [
   },
 ];
 
+const testimonials = [
+  {
+    quote: "ಈ ಸೆಷನ್ ತುಂಬಾ ಅದ್ಭುತವಾಗಿತ್ತು. ಎಥಿಕಲ್ ಹ್ಯಾಕಿಂಗ್ ವಿಷಯದ ಬಗ್ಗೆ ಸರಳವಾಗಿ ಮತ್ತು ಸ್ಪಷ್ಟವಾಗಿ ಮಾಹಿತಿ ನೀಡಿದರು.",
+    translation: "This session was amazing. The information about ethical hacking was delivered simply and clearly.",
+    author: "Verified Student",
+  },
+  {
+    quote: "ಈ ಕೋರ್ಸ್ ನನ್ನ ಕೆರಿಯರ್ ಅನ್ನು ಬದಲಾಯಿಸಿತು. ಇಲ್ಲಿ ಕಲಿಸಿದ OSINT ತಂತ್ರಗಳು ವಿಶ್ವ ದರ್ಜೆಯವು.",
+    translation: "This course changed my career. The OSINT techniques taught here are world-class.",
+    author: "OSINT Student",
+  },
+  {
+    quote: "ಡಾರ್ಕ್ ವೆಬ್ ಇನ್ವೆಸ್ಟಿಗೇಶನ್ ಬಗ್ಗೆ ಇಷ್ಟು ಸ್ಪಷ್ಟವಾಗಿ ಯಾರೂ ವಿವರಿಸುವುದಿಲ್ಲ. ಹೆಚ್ಚು ಶಿಫಾರಸು ಮಾಡುತ್ತೇನೆ!",
+    translation: "No one explains dark web investigation this clearly. Highly recommended!",
+    author: "Cyber Security Enthusiast",
+  },
+  {
+    quote: "ಕನ್ನಡದಲ್ಲಿ ಸೈಬರ್ ಸೆಕ್ಯುರಿಟಿ ಕಲಿಯಲು ತುಂಬಾ ಸುಲಭವಾಯಿತು. ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳಲು ಬಹಳ ಸಹಾಯಕವಾಯಿತು.",
+    translation: "Learning cybersecurity in Kannada made it so much easier to understand.",
+    author: "College Student",
+  },
+  {
+    quote: "1:1 ಮೆಂಟಾರ್‌ಶಿಪ್ ಸೆಷನ್ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿತ್ತು. ಸ್ಪಷ್ಟವಾದ ಕೆರಿಯರ್ ರೋಡ್‌ಮ್ಯಾಪ್ ಸಿಕ್ಕಿತು.",
+    translation: "The 1:1 mentorship session was incredibly useful. Got a clear career roadmap.",
+    author: "Career Mentee",
+  },
+];
+
 const Stars = () => (
   <div className="flex gap-0.5">
     {[...Array(5)].map((_, i) => (
@@ -103,6 +133,20 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
 const Courses = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!carouselApi) return;
+    setCurrent(carouselApi.selectedScrollSnap());
+  }, [carouselApi]);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    onSelect();
+    carouselApi.on("select", onSelect);
+    return () => { carouselApi.off("select", onSelect); };
+  }, [carouselApi, onSelect]);
 
   return (
     <section id="courses" className="py-20" ref={ref}>
@@ -121,17 +165,12 @@ const Courses = () => {
         <motion.div {...fadeUp(0.1)}>
           <Card className="bg-card border-border relative overflow-hidden mb-10"
             style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}>
-            {/* Gradient left border */}
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary" />
-
             <CardContent className="p-6 sm:p-8">
-              {/* Most Popular badge */}
               <Badge className="mb-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground border-0">
                 🔥 Most Popular
               </Badge>
-
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Left */}
                 <div className="space-y-4">
                   <Badge className="bg-secondary/20 text-secondary border-0">OSINT</Badge>
                   <h3 className="text-xl sm:text-2xl font-bold font-heading text-heading">
@@ -156,14 +195,9 @@ const Courses = () => {
                     <Stars />
                   </div>
                 </div>
-
-                {/* Right */}
                 <div className="flex flex-col items-center justify-center gap-4">
                   <PriceDisplay price={5999} inView={inView} large />
-                  <Button
-                    className="glow-btn w-full max-w-xs text-base py-5"
-                    asChild
-                  >
+                  <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
                     <a href="https://topmate.io/cyberdravida/1882730" target="_blank" rel="noopener noreferrer">
                       Enroll Now <ExternalLink size={16} className="ml-1" />
                     </a>
@@ -211,21 +245,47 @@ const Courses = () => {
           </Button>
         </motion.div>
 
-        {/* Testimonial */}
+        {/* Testimonials Carousel */}
         <motion.div {...fadeUp(0.35)} className="max-w-2xl mx-auto">
-          <Card className="bg-card border-border text-center">
-            <CardContent className="p-8 space-y-4">
-              <Quote size={32} className="text-muted-foreground/30 mx-auto" />
-              <Stars />
-              <p className="text-foreground/80 italic leading-relaxed">
-                "ಈ ಸೆಷನ್ ತುಂಬಾ ಅದ್ಭುತವಾಗಿತ್ತು. ಎಥಿಕಲ್ ಹ್ಯಾಕಿಂಗ್ ವಿಷಯದ ಬಗ್ಗೆ ಸರಳವಾಗಿ ಮತ್ತು ಸ್ಪಷ್ಟವಾಗಿ ಮಾಹಿತಿ ನೀಡಿದರು."
-              </p>
-              <p className="text-muted-foreground text-sm italic">
-                "This session was amazing. The information about ethical hacking was delivered simply and clearly."
-              </p>
-              <p className="text-muted-foreground text-sm font-medium">— Verified Student</p>
-            </CardContent>
-          </Card>
+          <Carousel
+            setApi={setCarouselApi}
+            plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]}
+            opts={{ loop: true }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {testimonials.map((t, index) => (
+                <CarouselItem key={index}>
+                  <Card className="bg-card border-border text-center">
+                    <CardContent className="p-8 space-y-4">
+                      <Quote size={32} className="text-muted-foreground/30 mx-auto" />
+                      <Stars />
+                      <p className="text-foreground/80 italic leading-relaxed">
+                        "{t.quote}"
+                      </p>
+                      <p className="text-muted-foreground text-sm italic">
+                        "{t.translation}"
+                      </p>
+                      <p className="text-muted-foreground text-sm font-medium">— {t.author}</p>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+          {/* Dot indicators */}
+          <div className="flex justify-center gap-2 mt-4">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => carouselApi?.scrollTo(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  current === index ? "bg-primary w-6" : "bg-muted-foreground/30"
+                }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
