@@ -60,6 +60,21 @@ const Hero = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 text-center relative z-10">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-6"
+        >
+          <img
+            src="/CDTRANS.png"
+            alt="Cyber Dravida"
+            className="h-24 w-24 object-contain mx-auto"
+            style={{ filter: "drop-shadow(0 0 18px rgba(99,102,241,0.5))" }}
+          />
+        </motion.div>
+
         {/* Badge */}
         <motion.div {...fadeUp(0)}>
           <Badge

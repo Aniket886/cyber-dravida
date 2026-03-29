@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Shield, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
@@ -72,7 +72,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <a href="#hero" onClick={(e) => handleClick(e, "#hero")} className="flex items-center gap-2">
-          <Shield className="h-7 w-7 text-primary" />
+          <img src="/CDTRANS.png" alt="Cyber Dravida" className="h-10 w-10 object-contain" />
           <span className="font-heading text-lg font-bold text-heading">Cyber Dravida</span>
         </a>
 
