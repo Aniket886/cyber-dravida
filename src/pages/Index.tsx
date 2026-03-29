@@ -14,7 +14,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background circuit-bg">
+    <div className="min-h-screen bg-background circuit-bg overflow-x-clip">
       <Navbar />
       <Hero />
       <SectionWrapper><About /></SectionWrapper>

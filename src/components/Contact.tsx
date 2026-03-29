@@ -188,14 +188,16 @@ const Contact = () => {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-center">
-                  <HCaptcha
-                    sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                    onVerify={(token) => setCaptchaToken(token)}
-                    onExpire={() => setCaptchaToken(null)}
-                    ref={captchaRef}
-                    theme="dark"
-                  />
+                <div className="flex justify-center w-full overflow-hidden">
+                  <div className="transform scale-[0.85] sm:scale-100 origin-center">
+                    <HCaptcha
+                      sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                      onVerify={(token) => setCaptchaToken(token)}
+                      onExpire={() => setCaptchaToken(null)}
+                      ref={captchaRef}
+                      theme="dark"
+                    />
+                  </div>
                 </div>
                 <Button type="submit" size="lg" className="w-full glow-btn gap-2" disabled={loading || !captchaToken}>
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
