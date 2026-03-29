@@ -9,19 +9,20 @@ import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
+import SectionWrapper from "@/components/SectionWrapper";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background circuit-bg">
       <Navbar />
       <Hero />
-      <About />
-      <Services />
-      <Stats />
-      <Events />
-      <Team />
-      <Blog />
-      <Contact />
+      <SectionWrapper><About /></SectionWrapper>
+      <SectionWrapper><Services /></SectionWrapper>
+      <SectionWrapper><Stats /></SectionWrapper>
+      <SectionWrapper><Events /></SectionWrapper>
+      <SectionWrapper><Team /></SectionWrapper>
+      <SectionWrapper><Blog /></SectionWrapper>
+      <SectionWrapper><Contact /></SectionWrapper>
       <ChatBot />
       <Footer />
     </div>

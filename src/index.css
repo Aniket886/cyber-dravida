@@ -79,3 +79,18 @@
     linear-gradient(90deg, hsl(var(--border) / 0.15) 1px, transparent 1px);
   background-size: 40px 40px;
 }
+
+/* Scroll offset for fixed navbar */
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
+/* Responsive chatbot */
+@media (max-width: 640px) {
+  .fixed.bottom-24.right-6 {
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    max-height: 70vh;
+  }
+}
