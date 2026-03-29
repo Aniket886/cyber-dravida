@@ -1,54 +1,31 @@
 
 
-## Final Polish Pass — Cyber Dravida Landing Page
+## Apply Official Logo Across the Site
 
 ### Overview
-Apply 9 polish items across the site: scroll animations, navbar active state, smooth scroll offset, mobile audit, favicon + meta tags, custom cursor, loading screen, and minor performance tweaks. No backend, no Supabase.
-
-Note: Contact and Footer sections are still placeholders — they will need to be built separately.
+Copy the uploaded `CDTRANS.png` to `public/` and replace the Shield icon with the logo image in 6 locations: Navbar, Hero, Loading Screen, Footer, Favicon, and ChatBot header.
 
 ### Steps
 
-1. **Create SVG favicon + update `index.html` meta tags**
-   - Create `public/favicon.svg` — a simple indigo shield SVG
-   - Update `index.html`: add favicon link, update `<title>`, add `<meta>` for description, og:title, og:description, og:type, twitter:card
+1. **Copy logo to `public/CDTRANS.png`**
 
-2. **Add loading screen component (`src/components/LoadingScreen.tsx`)**
-   - Full-screen overlay with Shield icon + "Cyber Dravida" text + indigo progress bar
-   - Auto-dismiss after 1.5s with fade-out via Framer Motion
-   - Render in `App.tsx` wrapping the router, using a `useState` + `useEffect` timer
+2. **Update `index.html`** — Replace SVG favicon with PNG references:
+   - `<link rel="icon" type="image/png" href="/CDTRANS.png" />`
+   - `<link rel="apple-touch-icon" href="/CDTRANS.png" />`
+   - Remove existing SVG favicon link
 
-3. **Add custom cursor (`src/index.css`)**
-   - CSS-only approach: hide default cursor on body, add a small indigo dot pseudo-element via a lightweight JS listener that updates CSS custom properties `--cx` and `--cy`
-   - Actually: add a tiny `CustomCursor` component in `App.tsx` — a fixed 8px indigo circle that follows mouse with CSS `transition: 0.15s` for lag effect. Desktop only (hidden on touch devices via media query).
+3. **Update `src/components/Navbar.tsx`** — Replace `<Shield>` icon with `<img src="/CDTRANS.png" alt="Cyber Dravida" className="h-10 w-10 object-contain" />`, keep "Cyber Dravida" text
 
-4. **Create `src/components/SectionWrapper.tsx`**
-   - Reusable Framer Motion wrapper: `motion.div` with `initial={{ opacity: 0, y: 40 }}`, `whileInView={{ opacity: 1, y: 0 }}`, `viewport={{ once: true }}`, `transition={{ duration: 0.5 }}`
-   - Wrap each section in `Index.tsx` with this component (About, Services, Stats, Events, Team, Blog, Contact)
-   - Hero already has its own animations, so skip it
+4. **Update `src/components/Hero.tsx`** — Add logo image centered above the heading with `h-24 w-24`, indigo drop-shadow glow, and Framer Motion fade-in + scale animation (0.8 → 1)
 
-5. **Navbar active state with IntersectionObserver**
-   - Update `Navbar.tsx`: use a `useEffect` with `IntersectionObserver` watching all section IDs
-   - Track `activeSection` state, highlight the matching nav link with `text-primary` class
-   - Threshold ~0.3, rootMargin to offset fixed navbar height
+5. **Update `src/components/LoadingScreen.tsx`** — Replace `<Shield>` with `<img src="/CDTRANS.png" className="h-28 w-28 object-contain animate-pulse" />`, remove Shield import
 
-6. **Smooth scroll with navbar offset**
-   - Update the `scrollTo` helper in Navbar and Hero to use `window.scrollTo` with calculated offset (element.offsetTop - 64px navbar height) instead of `scrollIntoView`
-   - Or add `scroll-margin-top: 4rem` to each section via CSS (simpler approach — add to `index.css`)
+6. **Update `src/components/Footer.tsx`** — Replace `<Shield>` with `<img src="/CDTRANS.png" className="h-9 w-9 object-contain" />` next to text (Footer is currently a placeholder — will add minimal logo + text treatment)
 
-7. **Mobile responsiveness audit (CSS fixes in `index.css`)**
-   - Add `scroll-margin-top: 4rem` to all sections
-   - Ensure chatbot panel is responsive: on mobile (`max-w-[calc(100vw-2rem)]`) and shorter height
-   - Team card: ensure `flex-col` on mobile (already `md:flex-row`)
-   - Events grid: ensure single column on small screens
-
-8. **Performance: memoize chatbot messages**
-   - ChatBot already looks fine, but wrap the messages `.map()` rendering in `useMemo` keyed on `messages` and `loading`
+7. **Update `src/components/ChatBot.tsx`** — Replace `<Shield>` in chat panel header with `<img src="/CDTRANS.png" alt="Dravida AI" className="h-7 w-7 object-contain" />`
 
 ### Technical Details
-- Favicon: inline SVG with `<path>` for a shield shape, fill `#6366f1`
-- Loading screen: `AnimatePresence` + `motion.div` with `exit={{ opacity: 0 }}`, controlled by a boolean state in `App.tsx`
-- Custom cursor: `position: fixed; pointer-events: none; z-index: 9999` div, `onMouseMove` updates `left`/`top` with `transition: all 0.15s ease-out`
-- IntersectionObserver in Navbar: observe sections `hero, about, services, events, blog, contact`, update active state on intersection
-- `scroll-margin-top` in CSS is the cleanest approach for navbar offset
+- All locations use plain `<img>` tags with `object-contain`, no background/border-radius
+- The floating chat button keeps the `MessageCircle` icon (not the logo)
+- Footer is currently empty — will add the logo + "Cyber Dravida" text only for now since the full Footer build was a separate task
 
