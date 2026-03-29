@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
+import Courses from "@/components/Courses";
 import Stats from "@/components/Stats";
 import Events from "@/components/Events";
 import Team from "@/components/Team";
@@ -18,6 +19,7 @@ const Index = () => {
       <Hero />
       <SectionWrapper><About /></SectionWrapper>
       <SectionWrapper><Services /></SectionWrapper>
+      <SectionWrapper><Courses /></SectionWrapper>
       <SectionWrapper><Stats /></SectionWrapper>
       <SectionWrapper><Events /></SectionWrapper>
       <SectionWrapper><Team /></SectionWrapper>
