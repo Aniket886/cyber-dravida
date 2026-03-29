@@ -182,8 +182,8 @@ const ChatBot = () => {
             </ScrollArea>
 
             {/* Input */}
-            <div className="px-3 py-3 border-t border-border">
-              <div className="flex items-center gap-2">
+            <div className="px-3 py-3 border-t border-border overflow-hidden">
+              <div className="flex items-center gap-2 w-full min-w-0">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
@@ -191,9 +191,9 @@ const ChatBot = () => {
                   placeholder="Ask about cybersecurity..."
                   disabled={loading}
                   maxLength={MAX_MESSAGE_LENGTH}
-                  className="flex-1 bg-background border-border text-sm"
+                  className="flex-1 min-w-0 bg-background border-border text-sm"
                 />
-                <Button size="icon" onClick={sendMessage} disabled={loading || !input.trim()}>
+                <Button size="icon" className="shrink-0" onClick={sendMessage} disabled={loading || !input.trim()}>
                   <Send size={16} />
                 </Button>
               </div>
