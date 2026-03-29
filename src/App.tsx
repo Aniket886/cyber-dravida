@@ -27,6 +27,7 @@ const App = () => {
         <CustomCursor />
         {loading && <LoadingScreen onDone={handleDone} />}
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services/:slug" element={<ServicePage />} />
