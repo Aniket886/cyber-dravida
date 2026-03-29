@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Globe, Instagram, Linkedin, Twitter, Send, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -39,12 +40,18 @@ const socials = [
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
   });
 
   const onSubmit = async (data: ContactForm) => {
+    if (!captchaToken) {
+      toast({ title: "Please complete the captcha", variant: "destructive" });
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -56,12 +63,15 @@ const Contact = () => {
           name: data.name,
           email: data.email,
           message: data.message,
+          "h-captcha-response": captchaToken,
         }),
       });
       const result = await res.json();
       if (result.success) {
         toast({ title: "Message sent!", description: "We'll get back to you soon." });
         form.reset();
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha();
       } else {
         toast({ title: "Failed to send", description: "Please try again later.", variant: "destructive" });
       }
