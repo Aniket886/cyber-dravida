@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const contactSchema = z.object({
@@ -42,6 +43,7 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
+  const isMobile = useIsMobile();
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
@@ -83,8 +85,8 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 overflow-x-hidden">
-      <div className="container mx-auto max-w-6xl">
+    <section id="contact" className="py-20 overflow-x-hidden">
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <motion.div className="text-center mb-14" {...fadeUp(0)}>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
@@ -99,7 +101,7 @@ const Contact = () => {
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left — Info */}
-          <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
+          <motion.div {...fadeUp(0.1)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
             <div className="space-y-6">
               {contactInfo.map((item) => {
                 const Icon = item.icon;
@@ -145,7 +147,7 @@ const Contact = () => {
           </motion.div>
 
           {/* Right — Form */}
-          <motion.div {...fadeUp(0.2)} className="bg-card border border-border rounded-xl p-6 sm:p-8">
+          <motion.div {...fadeUp(0.2)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
@@ -188,10 +190,11 @@ const Contact = () => {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-center w-full overflow-hidden">
-                  <div className="transform scale-[0.85] sm:scale-100 origin-center">
+                <div className="w-full flex justify-center min-h-[78px] overflow-hidden">
+                  <div className="w-fit max-w-full">
                     <HCaptcha
                       sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                      size={isMobile ? "compact" : "normal"}
                       onVerify={(token) => setCaptchaToken(token)}
                       onExpire={() => setCaptchaToken(null)}
                       ref={captchaRef}
