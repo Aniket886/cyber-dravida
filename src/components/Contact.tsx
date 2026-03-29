@@ -99,7 +99,7 @@ const Contact = () => {
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left — Info */}
-          <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-8 flex flex-col justify-between">
+          <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
             <div className="space-y-6">
               {contactInfo.map((item) => {
                 const Icon = item.icon;
