@@ -1,17 +1,20 @@
 
 
-## Connect Contact Form to Web3Forms
+## Fix Contact Form Error on cyberdravida.in
 
-Update `src/components/Contact.tsx` to send form submissions to Web3Forms using the provided access key.
+### Root Cause
+The `Content-Security-Policy` meta tag in `index.html` restricts outbound requests via `connect-src` to only `'self'` and `https://api.groq.com`. The contact form's POST to `https://api.web3forms.com` is being blocked by this CSP rule.
 
-### Changes — `src/components/Contact.tsx`
+### Fix
+**Update `index.html`** — Add `https://api.web3forms.com` to the `connect-src` directive. Also add `https://va.vercel-scripts.com` for Vercel Analytics/Speed Insights to work properly.
 
-1. Add `useState` for loading state
-2. Replace the current no-op `onSubmit` with an async function that:
-   - POSTs to `https://api.web3forms.com/submit` with `access_key: "4778d335-d991-4bb0-9e1c-40a995012eda"`, `name`, `email`, `message`, and `subject: "New Contact from Cyber Dravida Website"`
-   - Shows success or error toast based on response
-   - Resets form on success
-3. Add loading/disabled state to the submit button with a spinner
+The updated CSP `connect-src` will be:
+```
+connect-src 'self' https://api.groq.com https://api.web3forms.com https://va.vercel-scripts.com;
+```
 
-No other files need changes.
+### Changes
+1. **`index.html` line 15** — Update the `connect-src` directive to include `https://api.web3forms.com` and `https://va.vercel-scripts.com`
+
+Single-line change. No other files affected.
 
