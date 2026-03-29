@@ -37,15 +37,32 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    const visibleSections = new Map<string, number>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+            visibleSections.set(entry.target.id, entry.boundingClientRect.top);
+          } else {
+            visibleSections.delete(entry.target.id);
           }
         });
+
+        if (visibleSections.size > 0) {
+          // Pick the section closest to the top of the viewport
+          let topSection = "";
+          let minTop = Infinity;
+          visibleSections.forEach((top, id) => {
+            if (Math.abs(top) < minTop) {
+              minTop = Math.abs(top);
+              topSection = id;
+            }
+          });
+          if (topSection) setActiveSection(topSection);
+        }
       },
-      { threshold: 0.3, rootMargin: "-64px 0px 0px 0px" }
+      { threshold: 0.2, rootMargin: "-64px 0px -30% 0px" }
     );
 
     sectionIds.forEach((id) => {
