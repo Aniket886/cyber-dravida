@@ -1,28 +1,28 @@
 
 
-## Build Stats and Events Sections
+## Build Team and Blog Sections
 
 ### Steps
 
-1. **Build `src/components/Stats.tsx`**
-   - Wrapper with slightly lighter bg (`bg-[#0f0f16]`), glowing indigo divider lines (1px, 30% opacity) top and bottom
-   - Heading "Our Impact So Far" centered
-   - 4 stat cards in a responsive row: "500+" Students Trained, "10+" Events Conducted, "5+" Colleges Reached, "1" Year Active (Est. 2025)
-   - Large number with indigo-to-cyan gradient text, muted label below
-   - Custom `useCountUp` hook: uses `useInView` from framer-motion + `useEffect` with `requestAnimationFrame` to animate from 0 to target number over ~1.5s when section scrolls into view
-   - Framer Motion `whileInView` fade-up on the stat grid
+1. **Build `src/components/Team.tsx`**
+   - Heading "Meet the Team" + subheading, centered with fade-up
+   - Single wide card (max-w-3xl, horizontal layout on desktop via `md:flex-row`):
+     - Left: circular avatar with initials "AT" in indigo gradient background
+     - Right: name, role badge (indigo pill), tags row (dark pills for CEH, OSINT, TryHackMe Top 1%, CCI, Ethical Hacking Mentor), bio paragraph, two icon links (Terminal for TryHackMe, Linkedin for LinkedIn) opening in new tabs
+   - Below card: muted italic text about contributing with email
+   - Framer Motion fade-up on scroll
 
-2. **Build `src/components/Events.tsx`**
-   - Heading "Events & Programs" + subheading
-   - 3-column grid (horizontal scroll on mobile via `flex overflow-x-auto` or `grid sm:grid-cols-3`)
-   - Each card: Badge tag ("Upcoming" cyan / "Past" muted), bold title, date+location row with Calendar and MapPin lucide icons, description, "Know More →" outline button
-   - Same dark card style with `hover:-translate-y-1` and indigo border glow
-   - Staggered Framer Motion fade-up using `whileInView`
-   - Hardcoded 3 events: Cyber Awareness Workshop (Apr 2026, Upcoming), CTF Challenge Dravida Cup (May 2026, Upcoming), Cybersecurity Orientation (Oct 2025, Past)
+2. **Build `src/components/Blog.tsx`**
+   - Heading "From the Blog" + subheading, centered
+   - 3-column grid (1-col mobile) with 3 placeholder blog cards
+   - Each card: category Badge on top (colored: OSINT=cyan, CTF=indigo, Awareness=rose), bold title, excerpt text, "Read on Medium →" link to `https://medium.com/@anikettegginamath`, bottom row with author name + Clock icon + "5 min read"
+   - Same dark card style with hover glow
+   - Below grid: centered "Read All Posts →" outline button linking to Medium
+   - Staggered Framer Motion fade-up
 
 ### Technical Details
-- Counter hook: track `inView` boolean, animate with easing over ~60 frames, round to int, append "+" suffix where needed
-- Use existing shadcn Card, Badge components; lucide-react Calendar, MapPin icons
-- Consistent `py-20` section padding, container layout
-- Events mobile: `flex gap-6 overflow-x-auto snap-x` with `min-w-[300px]` cards, or responsive grid
+- Icons: `Terminal`, `Linkedin`, `Clock` from lucide-react; Avatar/AvatarFallback from shadcn for the initials circle
+- Badge component for role and tags; Card components for layout
+- All links use `target="_blank" rel="noopener noreferrer"`
+- Consistent `py-20` padding, container layout
 
