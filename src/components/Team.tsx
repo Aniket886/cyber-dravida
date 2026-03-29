@@ -83,6 +83,15 @@ const Team = () => {
                   >
                     <Linkedin size={18} />
                   </a>
+                  <a
+                    href="https://linktr.ee/anikettegginamath"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg bg-muted text-foreground/60 hover:text-primary transition-colors"
+                    aria-label="Linktree"
+                  >
+                    <Link size={18} />
+                  </a>
                 </div>
               </div>
             </CardContent>
