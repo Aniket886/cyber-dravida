@@ -7,8 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const SYSTEM_PROMPT =
-  "You are Dravida AI, the official AI assistant of Cyber Dravida — a Karnataka-based cybersecurity organization. You help users learn about cybersecurity, ethical hacking, OSINT, online safety, and Cyber Dravida's programs and events. Keep answers concise, friendly, and educational. If asked about joining Cyber Dravida, direct them to contact cyberdravida@gmail.com. Do not answer questions unrelated to cybersecurity or Cyber Dravida. Founder: Aniket Tegginamath.";
+const MAX_MESSAGE_LENGTH = 500;
 
 const INITIAL_MESSAGE: Message = {
   role: "assistant",
@@ -28,7 +27,7 @@ const ChatBot = () => {
   }, [messages, loading]);
 
   const sendMessage = async () => {
-    const text = input.trim();
+    const text = input.trim().slice(0, MAX_MESSAGE_LENGTH);
     if (!text || loading) return;
 
     const userMsg: Message = { role: "user", content: text };
@@ -38,33 +37,45 @@ const ChatBot = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const res = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          max_tokens: 500,
-          messages: [{ role: "system", content: SYSTEM_PROMPT }, ...updated],
+          messages: updated.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
+
+      if (res.status === 429) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "You're sending messages too fast. Please wait a moment and try again.",
+          },
+        ]);
+        return;
+      }
 
       if (!res.ok) throw new Error("API error");
 
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response.";
+      const reply =
+        data.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response.";
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again!" },
+        {
+          role: "assistant",
+          content: "Sorry, I'm having trouble connecting. Please try again!",
+        },
       ]);
     } finally {
       setLoading(false);
     }
   };
+
+  const charCount = input.length;
 
   return (
     <>
@@ -94,7 +105,10 @@ const ChatBot = () => {
                 <p className="text-sm font-bold font-heading text-foreground">Dravida AI</p>
                 <p className="text-[11px] text-muted-foreground">Cybersecurity Assistant</p>
               </div>
-              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+              <button
+                onClick={() => setOpen(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <X size={18} />
               </button>
             </div>
@@ -103,7 +117,10 @@ const ChatBot = () => {
             <ScrollArea className="flex-1 px-4 py-3">
               <div className="space-y-3">
                 {messages.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    key={i}
+                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
                     <div
                       className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
                         msg.role === "user"
@@ -129,18 +146,24 @@ const ChatBot = () => {
             </ScrollArea>
 
             {/* Input */}
-            <div className="flex items-center gap-2 px-3 py-3 border-t border-border">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Ask about cybersecurity..."
-                disabled={loading}
-                className="flex-1 bg-background border-border text-sm"
-              />
-              <Button size="icon" onClick={sendMessage} disabled={loading || !input.trim()}>
-                <Send size={16} />
-              </Button>
+            <div className="px-3 py-3 border-t border-border">
+              <div className="flex items-center gap-2">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                  placeholder="Ask about cybersecurity..."
+                  disabled={loading}
+                  maxLength={MAX_MESSAGE_LENGTH}
+                  className="flex-1 bg-background border-border text-sm"
+                />
+                <Button size="icon" onClick={sendMessage} disabled={loading || !input.trim()}>
+                  <Send size={16} />
+                </Button>
+              </div>
+              <p className="text-[10px] text-muted-foreground text-right mt-1">
+                {charCount}/{MAX_MESSAGE_LENGTH}
+              </p>
             </div>
           </motion.div>
         )}
