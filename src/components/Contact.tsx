@@ -99,7 +99,7 @@ const Contact = () => {
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left — Info */}
-          <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-8 flex flex-col justify-between">
+          <motion.div {...fadeUp(0.1)} className="bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
             <div className="space-y-6">
               {contactInfo.map((item) => {
                 const Icon = item.icon;
@@ -145,7 +145,7 @@ const Contact = () => {
           </motion.div>
 
           {/* Right — Form */}
-          <motion.div {...fadeUp(0.2)} className="bg-card border border-border rounded-xl p-8">
+          <motion.div {...fadeUp(0.2)} className="bg-card border border-border rounded-xl p-6 sm:p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
@@ -188,14 +188,16 @@ const Contact = () => {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-center">
-                  <HCaptcha
-                    sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                    onVerify={(token) => setCaptchaToken(token)}
-                    onExpire={() => setCaptchaToken(null)}
-                    ref={captchaRef}
-                    theme="dark"
-                  />
+                <div className="flex justify-center w-full overflow-hidden">
+                  <div className="transform scale-[0.85] sm:scale-100 origin-center">
+                    <HCaptcha
+                      sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                      onVerify={(token) => setCaptchaToken(token)}
+                      onExpire={() => setCaptchaToken(null)}
+                      ref={captchaRef}
+                      theme="dark"
+                    />
+                  </div>
                 </div>
                 <Button type="submit" size="lg" className="w-full glow-btn gap-2" disabled={loading || !captchaToken}>
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
