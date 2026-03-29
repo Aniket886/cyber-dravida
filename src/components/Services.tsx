@@ -70,9 +70,9 @@ const Services = () => {
                   <p className="text-foreground/60 text-sm leading-relaxed">
                     {s.desc}
                   </p>
-                  <span className="text-primary text-sm font-medium inline-block">
+                  <Link to={`/services/${s.slug}`} className="text-primary text-sm font-medium inline-block hover:underline">
                     Learn More →
-                  </span>
+                  </Link>
                 </CardContent>
               </Card>
             </motion.div>

@@ -28,6 +28,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/services/:slug" element={<ServicePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
