@@ -1,34 +1,31 @@
 
 
-## Add "Courses & Products" Section
+## Add Testimonials Carousel to Courses Section
 
 ### Overview
-Create a new full-featured "Courses & Digital Products" section with a featured course hero card, a 3-column product grid, a bottom CTA, and a testimonial quote. Place it between Services and Stats. Update Navbar accordingly.
+Replace the single testimonial card with an auto-playing carousel of multiple testimonials, each with Kannada text and English translation. Use Embla Carousel (already in the project via the `carousel.tsx` UI component).
+
+### Testimonials Data
+Add 5 testimonials array with `quote` (Kannada), `translation` (English), and `author` fields:
+
+1. Current one (Verified Student) — ethical hacking session
+2. "ಈ ಕೋರ್ಸ್ ನನ್ನ ಕೆರಿಯರ್ ಅನ್ನು ಬದಲಾಯಿಸಿತು..." — "This course changed my career. The OSINT techniques taught here are world-class." — OSINT Student
+3. "ಡಾರ್ಕ್ ವೆಬ್ ಇನ್ವೆಸ್ಟಿಗೇಶನ್ ಬಗ್ಗೆ ಇಷ್ಟು ಸ್ಪಷ್ಟವಾಗಿ..." — "No one explains dark web investigation this clearly. Highly recommended!" — Cyber Security Enthusiast
+4. "ಕನ್ನಡದಲ್ಲಿ ಸೈಬರ್ ಸೆಕ್ಯುರಿಟಿ ಕಲಿಯಲು..." — "Learning cybersecurity in Kannada made it so much easier to understand." — College Student
+5. "1:1 ಮೆಂಟಾರ್‌ಶಿಪ್ ಸೆಷನ್ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿತ್ತು..." — "The 1:1 mentorship session was incredibly useful. Got a clear career roadmap." — Career Mentee
+
+### Implementation — `src/components/Courses.tsx`
+
+1. Import `Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext` from `@/components/ui/carousel` and Autoplay from `embla-carousel-autoplay`
+2. Add `testimonials` array with the 5 items above
+3. Replace the single testimonial card with a Carousel using Autoplay plugin (3s delay, stopOnInteraction: false)
+4. Each carousel item renders the same card style: Quote icon, 5 stars, Kannada quote, English translation, author name
+5. Add dot indicators below showing active slide
+6. Keep prev/next arrow buttons styled to match the theme
+
+### Package
+- Install `embla-carousel-autoplay` for auto-play functionality
 
 ### Files Changed
-
-**1. Create `src/components/Courses.tsx`** (new file)
-- Section with `id="courses"`, heading "Learn With Us" with gradient text, subheading
-- **Featured card**: full-width, two-column layout (stacks on mobile), with:
-  - "Most Popular" gradient badge, OSINT category pill, title, description, feature checklist with Check icons, "6+ Students Enrolled" badge, 5-star rating
-  - Price "₹5,999" in gradient text, "Enroll Now →" glow button linking to Topmate (new tab), muted payment note
-  - Indigo border glow shadow, gradient left border (3px)
-- **Product grid**: 3 columns desktop / 1 mobile, 5 cards with category tags, titles, descriptions, prices, "Get Access →" outline buttons (all open new tab). Card 5 gets a "Popular" cyan pill
-- **Bottom CTA**: centered text + "Visit Our Store →" glow button linking to topmate.io/cyberdravida
-- **Testimonial**: dark centered card with quote icon, Kannada quote + translation, "— Verified Student", 5 stars
-- **Animations**: fadeUp with stagger on grid cards (matching Services pattern), price count-up animation on scroll using the same pattern as Stats
-
-**2. Update `src/pages/Index.tsx`**
-- Import Courses component
-- Add `<SectionWrapper><Courses /></SectionWrapper>` between Services and Stats
-
-**3. Update `src/components/Navbar.tsx`**
-- Add `{ label: "Courses", href: "#courses" }` between Services and Events in `navLinks`
-- Add `"courses"` to `sectionIds` array
-
-### Design Consistency
-- Same color variables (primary, secondary, destructive), card styles, font families (Space Grotesk headings, Inter body)
-- Same fadeUp animation pattern from Services/Stats
-- Same hover effects (translate-y + border glow)
-- Responsive: grid collapses to single column, featured card stacks vertically
+- `src/components/Courses.tsx` — Replace single testimonial with carousel of 5
 
