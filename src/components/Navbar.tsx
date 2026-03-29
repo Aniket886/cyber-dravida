@@ -26,6 +26,9 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const navContainerRef = useRef<HTMLDivElement>(null);
+  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
+  const [glassStyle, setGlassStyle] = useState<{ left: number; width: number } | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -53,16 +56,43 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, []);
 
+  const updateGlassPosition = useCallback(() => {
+    const activeLink = linkRefs.current.get(activeSection);
+    const container = navContainerRef.current;
+    if (!activeLink || !container) {
+      setGlassStyle(null);
+      return;
+    }
+    const containerRect = container.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    setGlassStyle({
+      left: linkRect.left - containerRect.left - 8,
+      width: linkRect.width + 16,
+    });
+  }, [activeSection]);
+
+  useEffect(() => {
+    updateGlassPosition();
+    window.addEventListener("resize", updateGlassPosition);
+    return () => window.removeEventListener("resize", updateGlassPosition);
+  }, [updateGlassPosition]);
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     scrollTo(href.replace("#", ""));
     setOpen(false);
   };
 
+  const setLinkRef = useCallback((el: HTMLAnchorElement | null, id: string) => {
+    if (el) {
+      linkRefs.current.set(id, el);
+    }
+  }, []);
+
   const linkClass = (href: string) => {
     const id = href.replace("#", "");
     const isActive = activeSection === id;
-    return `text-sm transition-colors ${isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"}`;
+    return `relative z-10 text-sm transition-colors duration-200 ${isActive ? "text-primary-foreground font-medium" : "text-foreground/70 hover:text-primary"}`;
   };
 
   return (
@@ -77,13 +107,34 @@ const Navbar = () => {
           <span className="font-heading text-lg font-bold text-heading">Cyber Dravida</span>
         </a>
 
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-1 relative" ref={navContainerRef}>
+          {/* Liquid glass pill */}
+          {glassStyle && (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 h-8 rounded-full pointer-events-none"
+              style={{
+                left: glassStyle.left,
+                width: glassStyle.width,
+                transition: "left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                background: "linear-gradient(135deg, hsl(var(--primary) / 0.85), hsl(var(--primary) / 0.6))",
+                boxShadow: "0 0 20px hsl(var(--primary) / 0.35), inset 0 1px 1px hsl(var(--primary-foreground) / 0.15), 0 4px 12px hsl(var(--primary) / 0.2)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid hsl(var(--primary) / 0.3)",
+              }}
+            />
+          )}
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} onClick={(e) => handleClick(e, link.href)} className={linkClass(link.href)}>
+            <a
+              key={link.label}
+              href={link.href}
+              ref={(el) => setLinkRef(el, link.href.replace("#", ""))}
+              onClick={(e) => handleClick(e, link.href)}
+              className={linkClass(link.href) + " px-3 py-1.5"}
+            >
               {link.label}
             </a>
           ))}
-          <Button className="glow-btn" onClick={() => scrollTo("contact")}>Join Us</Button>
+          <Button className="glow-btn ml-4" onClick={() => scrollTo("contact")}>Join Us</Button>
         </div>
 
         <div className="md:hidden">
@@ -94,11 +145,28 @@ const Navbar = () => {
             <SheetContent side="top" className="bg-background border-b border-border pt-12">
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <div className="flex flex-col gap-4 pb-6">
-                {navLinks.map((link) => (
-                  <a key={link.label} href={link.href} onClick={(e) => handleClick(e, link.href)} className={linkClass(link.href) + " text-base py-1"}>
-                    {link.label}
-                  </a>
-                ))}
+                {navLinks.map((link) => {
+                  const id = link.href.replace("#", "");
+                  const isActive = activeSection === id;
+                  return (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      onClick={(e) => handleClick(e, link.href)}
+                      className={`text-base py-2 px-3 rounded-lg transition-all duration-300 ${
+                        isActive
+                          ? "text-primary-foreground font-medium"
+                          : "text-foreground/70 hover:text-primary"
+                      }`}
+                      style={isActive ? {
+                        background: "linear-gradient(135deg, hsl(var(--primary) / 0.85), hsl(var(--primary) / 0.6))",
+                        boxShadow: "0 0 14px hsl(var(--primary) / 0.3)",
+                      } : {}}
+                    >
+                      {link.label}
+                    </a>
+                  );
+                })}
                 <Button className="glow-btn w-full mt-2" onClick={() => { scrollTo("contact"); setOpen(false); }}>Join Us</Button>
               </div>
             </SheetContent>
