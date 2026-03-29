@@ -1,49 +1,63 @@
 
-## Fix “Get in Touch” mobile alignment (box shifted right / clipped)
 
-### What’s causing it
-From the current code, the Contact form area is still too tight on mobile:
-- `section` has `px-4`
-- inner `.container` adds default Tailwind container padding (`2rem` each side)
-- form card has `p-6`
-- hCaptcha renders with fixed intrinsic width (~303px)
+## Create Service Detail Subpages with Guides, Glossary & Roadmaps
 
-That combination makes the captcha/form content wider than the available inner space. Also, `transform: scale(...)` only changes visual size, not layout width, so it can still overflow and look off-center.
+### Overview
+Create 4 dedicated subpages for each service, linked from the "Learn More →" buttons. Each page includes detailed info, curated resource links, a learning roadmap, and a glossary. A shared layout component keeps styling consistent.
 
-### Implementation plan
+### Files to Create
 
-1. **Update Contact section horizontal spacing (`src/components/Contact.tsx`)**
-   - Replace the current `container` usage with an explicit responsive wrapper that avoids double-padding on mobile:
-     - use `w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8`
-   - Keep section clean (`py-20`) and rely on wrapper padding.
-   - Add `min-w-0` to grid children/cards to prevent intrinsic-width overflow in flex/grid contexts.
+**1. `src/data/servicePages.ts`** — Central data file with all content for the 4 services:
+- Each entry: `slug`, `title`, `icon`, `color`, `heroDescription`, `sections` (What You'll Learn, Who It's For, Key Topics), `resources` (name + URL pairs to external guides/tools), `roadmap` (ordered steps with title + description), `glossary` (term + definition pairs)
+- Content covers:
+  - **Cybersecurity Training** (`/services/cybersecurity-training`): ethical hacking basics, network security, digital forensics, certifications (CEH, CompTIA), links to TryHackMe, HackTheBox, OWASP, roadmap from basics to advanced pentesting
+  - **Awareness Outreach** (`/services/awareness-outreach`): social engineering, phishing, password hygiene, campus workshop info, links to NIST, SANS awareness resources, roadmap for organizing awareness programs
+  - **CTF Competitions** (`/services/ctf-competitions`): what CTFs are, categories (web, crypto, pwn, forensics, misc), how to get started, links to CTFtime, PicoCTF, OverTheWire, roadmap from beginner wargames to competitive CTFs
+  - **OSINT & Investigation** (`/services/osint-investigation`): OSINT framework, tools (Maltego, Shodan, theHarvester), investigation methodology, links to OSINT Framework site, IntelTechniques, roadmap from Google dorking to advanced profiling
 
-2. **Replace scale-based hCaptcha sizing with true responsive sizing (`src/components/Contact.tsx`)**
-   - Import and use `useIsMobile` from `@/hooks/use-mobile`.
-   - Remove the `scale-[0.85]` transform wrapper.
-   - Render hCaptcha with:
-     - `size="compact"` on mobile
-     - `size="normal"` on tablet/desktop
-   - Keep it centered with `w-full flex justify-center` and `w-fit max-w-full` wrapper.
+**2. `src/components/ServicePageLayout.tsx`** — Shared layout component used by all 4 pages:
+- Back button (Link to `/#services`)
+- Hero section with icon, title, description
+- Tabbed sections using existing `Tabs` component: Overview | Resources | Roadmap | Glossary
+- **Overview tab**: detailed paragraphs, key topics as badge chips, "Who It's For" section
+- **Resources tab**: grid of external link cards (open in new tab) with name + description
+- **Roadmap tab**: vertical timeline/stepper showing learning path stages
+- **Glossary tab**: alphabetically sorted terms using `Accordion` component
+- Footer at bottom
+- Same dark theme, fonts, animations as main site
 
-3. **Keep existing spam/security logic unchanged**
-   - Keep honeypot input (`botcheck`)
-   - Keep hCaptcha token handling (`onVerify`, `onExpire`, reset on success)
-   - Keep zod validation and toast behavior as-is
+**3. `src/pages/ServicePage.tsx`** — Route page component:
+- Reads `slug` from URL params via `useParams`
+- Looks up data from `servicePages.ts`
+- Renders `ServicePageLayout` with the data
+- Shows `NotFound` if slug doesn't match
 
-4. **Retain global overflow protection (`src/pages/Index.tsx`)**
-   - Keep `overflow-x-hidden` on page wrapper (already present) as a safety guard.
+### Files to Modify
 
-5. **Mobile QA pass in preview**
-   - Verify at **390x844** and **320x568**:
-     - no bottom horizontal scrollbar
-     - contact form card is centered
-     - hCaptcha box fully visible and centered
-     - submit button fully visible and aligned
-   - Scroll whole page to ensure no section introduces horizontal overflow.
-   - Submit one test message to ensure captcha + Web3Forms flow still works.
+**4. `src/App.tsx`** — Add route:
+```
+<Route path="/services/:slug" element={<ServicePage />} />
+```
 
-### Technical details
-- Core fix is removing layout-width conflict, not just hiding overflow.
-- `size="compact"` is the reliable mobile-safe hCaptcha mode.
-- Explicit wrapper padding avoids cumulative spacing (`section + container + card`) that currently shrinks usable width too much.
+**5. `src/components/Services.tsx`** — Make "Learn More →" a real link:
+- Add `slug` field to each service object
+- Replace `<span>Learn More →</span>` with `<Link to={/services/${s.slug}} className="...">Learn More →</Link>`
+- Import `Link` from `react-router-dom`
+
+**6. `src/components/Navbar.tsx`** — No changes needed (Services already links to `#services` section on homepage)
+
+### Content Depth Per Page
+Each page will have:
+- 3-4 detailed paragraphs in overview
+- 6-8 key topic badges
+- 6-10 curated external resource links (real URLs to TryHackMe, HackTheBox, OWASP, CTFtime, PicoCTF, SANS, NIST, etc.)
+- 5-7 roadmap stages with descriptions
+- 10-15 glossary terms with definitions
+
+### Design Details
+- Uses existing UI components: `Tabs`, `Accordion`, `Card`, `Badge`, `Button`
+- Same `circuit-bg` background, same color scheme
+- Scroll to top on page load
+- Fully responsive (single column on mobile, grid on desktop for resources)
+- All external links open in new tabs
+
