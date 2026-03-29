@@ -84,6 +84,34 @@ const products = [
   },
 ];
 
+const testimonials = [
+  {
+    quote: "ಈ ಸೆಷನ್ ತುಂಬಾ ಅದ್ಭುತವಾಗಿತ್ತು. ಎಥಿಕಲ್ ಹ್ಯಾಕಿಂಗ್ ವಿಷಯದ ಬಗ್ಗೆ ಸರಳವಾಗಿ ಮತ್ತು ಸ್ಪಷ್ಟವಾಗಿ ಮಾಹಿತಿ ನೀಡಿದರು.",
+    translation: "This session was amazing. The information about ethical hacking was delivered simply and clearly.",
+    author: "Verified Student",
+  },
+  {
+    quote: "ಈ ಕೋರ್ಸ್ ನನ್ನ ಕೆರಿಯರ್ ಅನ್ನು ಬದಲಾಯಿಸಿತು. ಇಲ್ಲಿ ಕಲಿಸಿದ OSINT ತಂತ್ರಗಳು ವಿಶ್ವ ದರ್ಜೆಯವು.",
+    translation: "This course changed my career. The OSINT techniques taught here are world-class.",
+    author: "OSINT Student",
+  },
+  {
+    quote: "ಡಾರ್ಕ್ ವೆಬ್ ಇನ್ವೆಸ್ಟಿಗೇಶನ್ ಬಗ್ಗೆ ಇಷ್ಟು ಸ್ಪಷ್ಟವಾಗಿ ಯಾರೂ ವಿವರಿಸುವುದಿಲ್ಲ. ಹೆಚ್ಚು ಶಿಫಾರಸು ಮಾಡುತ್ತೇನೆ!",
+    translation: "No one explains dark web investigation this clearly. Highly recommended!",
+    author: "Cyber Security Enthusiast",
+  },
+  {
+    quote: "ಕನ್ನಡದಲ್ಲಿ ಸೈಬರ್ ಸೆಕ್ಯುರಿಟಿ ಕಲಿಯಲು ತುಂಬಾ ಸುಲಭವಾಯಿತು. ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳಲು ಬಹಳ ಸಹಾಯಕವಾಯಿತು.",
+    translation: "Learning cybersecurity in Kannada made it so much easier to understand.",
+    author: "College Student",
+  },
+  {
+    quote: "1:1 ಮೆಂಟಾರ್‌ಶಿಪ್ ಸೆಷನ್ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿತ್ತು. ಸ್ಪಷ್ಟವಾದ ಕೆರಿಯರ್ ರೋಡ್‌ಮ್ಯಾಪ್ ಸಿಕ್ಕಿತು.",
+    translation: "The 1:1 mentorship session was incredibly useful. Got a clear career roadmap.",
+    author: "Career Mentee",
+  },
+];
+
 const Stars = () => (
   <div className="flex gap-0.5">
     {[...Array(5)].map((_, i) => (
