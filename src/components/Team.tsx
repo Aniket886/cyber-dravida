@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Terminal, Linkedin } from "lucide-react";
+import { Terminal, Linkedin, Link } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -82,6 +82,15 @@ const Team = () => {
                     aria-label="LinkedIn"
                   >
                     <Linkedin size={18} />
+                  </a>
+                  <a
+                    href="https://linktr.ee/anikettegginamath"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg bg-muted text-foreground/60 hover:text-primary transition-colors"
+                    aria-label="Linktree"
+                  >
+                    <Link size={18} />
                   </a>
                 </div>
               </div>
