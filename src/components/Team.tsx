@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Terminal, Linkedin } from "lucide-react";
+import { Terminal, Linkedin, Link } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
