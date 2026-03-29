@@ -1,31 +1,34 @@
 
+## Fix mobile horizontal scroll (bottom scrollbar) and re-verify end-to-end
 
-## Add Testimonials Carousel to Courses Section
+### What I found
+- Most sections are already responsive (`grid sm:/md:/lg:` patterns look correct).
+- The strongest overflow suspect is in `Contact.tsx`: hCaptcha is embedded as a fixed-width iframe, while the mobile form card uses `p-8`.
+- On a 390px viewport, that combination can make the captcha area wider than the card content, which causes the page-level horizontal scrollbar.
 
-### Overview
-Replace the single testimonial card with an auto-playing carousel of multiple testimonials, each with Kannada text and English translation. Use Embla Carousel (already in the project via the `carousel.tsx` UI component).
+### Implementation plan
 
-### Testimonials Data
-Add 5 testimonials array with `quote` (Kannada), `translation` (English), and `author` fields:
+1. **Update `src/components/Contact.tsx` (primary fix)**
+   - Make card padding mobile-safe:
+     - change both contact cards from `p-8` to `p-6 sm:p-8`
+   - Wrap hCaptcha in a responsive container:
+     - outer wrapper: `w-full overflow-hidden`
+     - inner wrapper: centered with optional scale only on very small widths (so captcha never pushes layout wider than viewport)
+   - Keep existing submit logic, toast flow, honeypot, and hCaptcha token handling unchanged.
 
-1. Current one (Verified Student) — ethical hacking session
-2. "ಈ ಕೋರ್ಸ್ ನನ್ನ ಕೆರಿಯರ್ ಅನ್ನು ಬದಲಾಯಿಸಿತು..." — "This course changed my career. The OSINT techniques taught here are world-class." — OSINT Student
-3. "ಡಾರ್ಕ್ ವೆಬ್ ಇನ್ವೆಸ್ಟಿಗೇಶನ್ ಬಗ್ಗೆ ಇಷ್ಟು ಸ್ಪಷ್ಟವಾಗಿ..." — "No one explains dark web investigation this clearly. Highly recommended!" — Cyber Security Enthusiast
-4. "ಕನ್ನಡದಲ್ಲಿ ಸೈಬರ್ ಸೆಕ್ಯುರಿಟಿ ಕಲಿಯಲು..." — "Learning cybersecurity in Kannada made it so much easier to understand." — College Student
-5. "1:1 ಮೆಂಟಾರ್‌ಶಿಪ್ ಸೆಷನ್ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿತ್ತು..." — "The 1:1 mentorship session was incredibly useful. Got a clear career roadmap." — Career Mentee
+2. **Add a page-level safety guard (secondary protection)**
+   - In `src/pages/Index.tsx`, add `overflow-x-hidden` (or `overflow-x-clip`) to the top-level wrapper class.
+   - This prevents any tiny transform/iframe rounding overflow from creating a bottom scrollbar across sections.
 
-### Implementation — `src/components/Courses.tsx`
+3. **Mobile verification in preview (390x844)**
+   - Scroll through all sections: Hero, About, Services, Courses, Stats, Events, Team, Blog, Contact, Footer.
+   - Confirm:
+     - no bottom horizontal scrollbar appears at any section
+     - contact form + hCaptcha are fully visible and centered
+     - Courses cards/testimonials still fit correctly on mobile
+     - chatbot panel still opens without creating horizontal overflow
 
-1. Import `Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext` from `@/components/ui/carousel` and Autoplay from `embla-carousel-autoplay`
-2. Add `testimonials` array with the 5 items above
-3. Replace the single testimonial card with a Carousel using Autoplay plugin (3s delay, stopOnInteraction: false)
-4. Each carousel item renders the same card style: Quote icon, 5 stars, Kannada quote, English translation, author name
-5. Add dot indicators below showing active slide
-6. Keep prev/next arrow buttons styled to match the theme
-
-### Package
-- Install `embla-carousel-autoplay` for auto-play functionality
-
-### Files Changed
-- `src/components/Courses.tsx` — Replace single testimonial with carousel of 5
-
+### Technical details
+- Root cause is likely fixed-width third-party embed behavior (hCaptcha iframe) inside a padded mobile card.
+- Responsive wrappers and reduced mobile padding fix the true source.
+- `overflow-x-hidden/clip` is added as a defensive fallback for any residual 1–2px overflow from transforms/animations.
