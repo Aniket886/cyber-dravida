@@ -4,7 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
 
 const scrollTo = (id: string) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - 64;
+  window.scrollTo({ top, behavior: "smooth" });
 };
 
 const fadeUp = (delay: number) => ({

@@ -12,13 +12,19 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
+const sectionIds = ["hero", "about", "services", "stats", "events", "team", "blog", "contact"];
+
 const scrollTo = (id: string) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - 64;
+  window.scrollTo({ top, behavior: "smooth" });
 };
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -26,10 +32,36 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: "-64px 0px 0px 0px" }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     scrollTo(href.replace("#", ""));
     setOpen(false);
+  };
+
+  const linkClass = (href: string) => {
+    const id = href.replace("#", "");
+    const isActive = activeSection === id;
+    return `text-sm transition-colors ${isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"}`;
   };
 
   return (
@@ -39,68 +71,34 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        {/* Logo */}
-        <a
-          href="#hero"
-          onClick={(e) => handleClick(e, "#hero")}
-          className="flex items-center gap-2"
-        >
+        <a href="#hero" onClick={(e) => handleClick(e, "#hero")} className="flex items-center gap-2">
           <Shield className="h-7 w-7 text-primary" />
-          <span className="font-heading text-lg font-bold text-heading">
-            Cyber Dravida
-          </span>
+          <span className="font-heading text-lg font-bold text-heading">Cyber Dravida</span>
         </a>
 
-        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={(e) => handleClick(e, link.href)}
-              className="text-sm text-foreground/70 hover:text-primary transition-colors"
-            >
+            <a key={link.label} href={link.href} onClick={(e) => handleClick(e, link.href)} className={linkClass(link.href)}>
               {link.label}
             </a>
           ))}
-          <Button
-            className="glow-btn"
-            onClick={() => scrollTo("contact")}
-          >
-            Join Us
-          </Button>
+          <Button className="glow-btn" onClick={() => scrollTo("contact")}>Join Us</Button>
         </div>
 
-        {/* Mobile menu */}
         <div className="md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
+              <Button variant="ghost" size="icon"><Menu className="h-5 w-5" /></Button>
             </SheetTrigger>
             <SheetContent side="top" className="bg-background border-b border-border pt-12">
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <div className="flex flex-col gap-4 pb-6">
                 {navLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={(e) => handleClick(e, link.href)}
-                    className="text-foreground/80 hover:text-primary transition-colors text-base py-1"
-                  >
+                  <a key={link.label} href={link.href} onClick={(e) => handleClick(e, link.href)} className={linkClass(link.href) + " text-base py-1"}>
                     {link.label}
                   </a>
                 ))}
-                <Button
-                  className="glow-btn w-full mt-2"
-                  onClick={() => {
-                    scrollTo("contact");
-                    setOpen(false);
-                  }}
-                >
-                  Join Us
-                </Button>
+                <Button className="glow-btn w-full mt-2" onClick={() => { scrollTo("contact"); setOpen(false); }}>Join Us</Button>
               </div>
             </SheetContent>
           </Sheet>
