@@ -37,7 +37,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const visibleSections = new Map<string, number>();
+    const visibleSections = new Map<string, boolean>();
 
     const observer = new IntersectionObserver(
       (entries) => {
