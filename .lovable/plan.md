@@ -1,20 +1,22 @@
 
 
-## Fix Contact Form Error on cyberdravida.in
+## Add Honeypot Spam Protection to Contact Form
 
-### Root Cause
-The `Content-Security-Policy` meta tag in `index.html` restricts outbound requests via `connect-src` to only `'self'` and `https://api.groq.com`. The contact form's POST to `https://api.web3forms.com` is being blocked by this CSP rule.
+### What
+Add a hidden honeypot field that bots will fill out but humans won't see. If the field has a value on submit, silently reject the submission.
 
-### Fix
-**Update `index.html`** — Add `https://api.web3forms.com` to the `connect-src` directive. Also add `https://va.vercel-scripts.com` for Vercel Analytics/Speed Insights to work properly.
+### Changes — `src/components/Contact.tsx`
 
-The updated CSP `connect-src` will be:
+1. Add a hidden input field named `botcheck` (Web3Forms supports this natively) inside the form
+2. The field is visually hidden with CSS (`display: none`) so real users never see it
+3. Web3Forms automatically rejects submissions where `botcheck` has a value
+
+Since Web3Forms has built-in honeypot support, we just need to add:
+```tsx
+<input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
 ```
-connect-src 'self' https://api.groq.com https://api.web3forms.com https://va.vercel-scripts.com;
-```
 
-### Changes
-1. **`index.html` line 15** — Update the `connect-src` directive to include `https://api.web3forms.com` and `https://va.vercel-scripts.com`
+inside the `<form>` element. No schema or logic changes needed — Web3Forms handles the rest server-side.
 
-Single-line change. No other files affected.
+Single line addition. No other files affected.
 
