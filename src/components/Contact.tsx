@@ -83,7 +83,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-4">
+    <section id="contact" className="py-20 px-4 overflow-x-hidden">
       <div className="container mx-auto max-w-6xl">
         {/* Heading */}
         <motion.div className="text-center mb-14" {...fadeUp(0)}>
