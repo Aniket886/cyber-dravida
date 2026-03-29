@@ -150,15 +150,15 @@ const ChatBot = () => {
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 px-4 py-3">
-              <div className="space-y-3">
+            <ScrollArea className="flex-1 px-4 py-3 overflow-hidden">
+              <div className="space-y-3 min-w-0">
                 {messages.map((msg, i) => (
                   <div
                     key={i}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                      className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed break-words overflow-hidden ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
@@ -182,8 +182,8 @@ const ChatBot = () => {
             </ScrollArea>
 
             {/* Input */}
-            <div className="px-3 py-3 border-t border-border">
-              <div className="flex items-center gap-2">
+            <div className="px-3 py-3 border-t border-border overflow-hidden">
+              <div className="flex items-center gap-2 w-full min-w-0">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value.slice(0, MAX_MESSAGE_LENGTH))}
@@ -191,9 +191,9 @@ const ChatBot = () => {
                   placeholder="Ask about cybersecurity..."
                   disabled={loading}
                   maxLength={MAX_MESSAGE_LENGTH}
-                  className="flex-1 bg-background border-border text-sm"
+                  className="flex-1 min-w-0 bg-background border-border text-sm"
                 />
-                <Button size="icon" onClick={sendMessage} disabled={loading || !input.trim()}>
+                <Button size="icon" className="shrink-0" onClick={sendMessage} disabled={loading || !input.trim()}>
                   <Send size={16} />
                 </Button>
               </div>
