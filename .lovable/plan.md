@@ -1,11 +1,9 @@
 
 
-## Add Vercel Analytics
-
-Since this is a React (Vite) project, not Next.js, the correct import is `@vercel/analytics/react` instead of `@vercel/analytics/next`.
+## Add Vercel Speed Insights
 
 ### Steps
 
-1. **Install `@vercel/analytics`** package
-2. **Update `src/App.tsx`** — Add `import { Analytics } from "@vercel/analytics/react"` and render `<Analytics />` inside the component tree (after `<BrowserRouter>`)
+1. **Install `@vercel/speed-insights`** package
+2. **Update `src/App.tsx`** — Add `import { SpeedInsights } from "@vercel/speed-insights/react"` and render `<SpeedInsights />` next to the existing `<Analytics />` component
 
