@@ -92,7 +92,7 @@ const Hero = () => {
         >
           <span className="text-heading">Where Curiosity</span>
           <br />
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#a855f7] via-[#6366f1] to-[#06b6d4] bg-clip-text text-transparent">
             Meets Cybersecurity.
           </span>
         </motion.h1>
