@@ -30,6 +30,7 @@ const Team = () => {
           <Card className="max-w-3xl mx-auto bg-card border-border hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300">
             <CardContent className="p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
               <Avatar className="h-28 w-28 shrink-0">
+                <AvatarImage src="/team/aniket.png" alt="Aniket Tegginamath" />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-3xl font-heading font-bold text-primary-foreground">
                   AT
                 </AvatarFallback>
