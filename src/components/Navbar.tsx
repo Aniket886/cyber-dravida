@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-const sectionIds = ["hero", "about", "services", "stats", "events", "team", "blog", "contact"];
+const sectionIds = ["hero", "about", "services", "courses", "stats", "events", "team", "blog", "contact"];
 
 const scrollTo = (id: string) => {
   const el = document.getElementById(id);
