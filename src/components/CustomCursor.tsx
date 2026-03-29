@@ -1,18 +1,15 @@
 import { useEffect, useRef } from "react";
 
-const TRAIL_LENGTH = 15;
-const DIAMOND_SIZE = 5;
-const HOVER_SIZE = 8;
+const TRAIL_LENGTH = 20;
 
 const CustomCursor = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouse = useRef({ x: -100, y: -100 });
-  const trail = useRef<{ x: number; y: number }[]>([]);
+  const points = useRef<{ x: number; y: number; time: number }[]>([]);
   const hovering = useRef(false);
   const visible = useRef(false);
   const raf = useRef<number>(0);
-  const rotation = useRef(0);
-  const frameCount = useRef(0);
+  const pulsePhase = useRef(0);
 
   useEffect(() => {
     const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
@@ -24,8 +21,12 @@ const CustomCursor = () => {
     if (!ctx) return;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.scale(dpr, dpr);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -33,6 +34,8 @@ const CustomCursor = () => {
     const onMove = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       visible.current = true;
+      points.current.unshift({ x: e.clientX, y: e.clientY, time: performance.now() });
+      if (points.current.length > TRAIL_LENGTH) points.current.length = TRAIL_LENGTH;
     };
 
     const onOver = (e: MouseEvent) => {
@@ -43,77 +46,111 @@ const CustomCursor = () => {
     const onLeave = () => { visible.current = false; };
     const onEnter = () => { visible.current = true; };
 
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      frameCount.current++;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+      pulsePhase.current += 0.05;
 
-      if (visible.current) {
-        // Sample trail every 2 frames for smoother tail
-        if (frameCount.current % 2 === 0) {
-          trail.current.unshift({ x: mouse.current.x, y: mouse.current.y });
-          if (trail.current.length > TRAIL_LENGTH) trail.current.pop();
-        }
-
-        // Draw trail particles — indigo to cyan gradient
-        for (let i = trail.current.length - 1; i >= 0; i--) {
-          const p = trail.current[i];
-          const t = i / TRAIL_LENGTH;
-          const size = lerp(3, 0.5, t);
-          const opacity = lerp(0.5, 0, t);
-          // Indigo (99, 102, 241) → Cyan (6, 182, 212)
-          const r = Math.round(lerp(99, 6, t));
-          const g = Math.round(lerp(102, 182, t));
-          const b = Math.round(lerp(241, 212, t));
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
-          ctx.fill();
-        }
-
+      if (visible.current && points.current.length > 1) {
         const { x, y } = mouse.current;
         const isHover = hovering.current;
-        const size = isHover ? HOVER_SIZE : DIAMOND_SIZE;
 
-        // Glow effect
-        ctx.shadowColor = isHover ? "rgba(99, 102, 241, 0.8)" : "rgba(99, 102, 241, 0.5)";
-        ctx.shadowBlur = isHover ? 18 : 10;
+        // Draw smooth ribbon trail
+        const pts = points.current;
+        if (pts.length >= 2) {
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
 
-        if (isHover) {
-          // Rotating square outline on hover
-          rotation.current += 0.04;
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(rotation.current);
-          ctx.strokeStyle = "rgba(99, 102, 241, 0.7)";
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(-size, -size, size * 2, size * 2);
-          ctx.restore();
+          // Draw trail as segments with decreasing width and opacity
+          for (let i = 0; i < pts.length - 1; i++) {
+            const t = i / (pts.length - 1);
+            const width = (1 - t) * (isHover ? 4 : 2.5);
+            const opacity = (1 - t) * 0.6;
+            
+            // Color: indigo at head, fading to transparent
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            
+            // Use quadratic curve for smoothness
+            if (i < pts.length - 2) {
+              const midX = (pts[i + 1].x + pts[i + 2].x) / 2;
+              const midY = (pts[i + 1].y + pts[i + 2].y) / 2;
+              ctx.quadraticCurveTo(pts[i + 1].x, pts[i + 1].y, midX, midY);
+            } else {
+              ctx.lineTo(pts[i + 1].x, pts[i + 1].y);
+            }
 
-          // Inner diamond
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(Math.PI / 4);
-          ctx.fillStyle = "rgba(129, 140, 248, 0.9)";
-          ctx.fillRect(-3, -3, 6, 6);
-          ctx.restore();
-        } else {
-          // Diamond cursor
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(Math.PI / 4);
-          ctx.fillStyle = "rgba(129, 140, 248, 0.9)";
-          ctx.fillRect(-size / 2, -size / 2, size, size);
-          ctx.restore();
+            ctx.strokeStyle = `rgba(129, 140, 248, ${opacity})`;
+            ctx.lineWidth = width;
+            ctx.stroke();
+          }
         }
 
-        // Reset shadow
+        // Crosshair cursor
+        const armLen = isHover ? 10 : 6;
+        const gap = isHover ? 4 : 3;
+        const pulse = isHover ? Math.sin(pulsePhase.current) * 0.15 + 0.85 : 1;
+        const alpha = pulse;
+
+        ctx.strokeStyle = `rgba(165, 180, 252, ${alpha})`;
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = "rgba(99, 102, 241, 0.6)";
+        ctx.shadowBlur = isHover ? 12 : 6;
+
+        // 4 arms of crosshair
+        const arms = [
+          [x, y - gap, x, y - gap - armLen],
+          [x, y + gap, x, y + gap + armLen],
+          [x - gap, y, x - gap - armLen, y],
+          [x + gap, y, x + gap + armLen, y],
+        ];
+        for (const [x1, y1, x2, y2] of arms) {
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+
+        // Center dot
+        ctx.shadowBlur = isHover ? 16 : 8;
+        ctx.fillStyle = `rgba(199, 210, 254, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(x, y, isHover ? 2.5 : 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Hover: rotating corner brackets
+        if (isHover) {
+          const r = 14 + Math.sin(pulsePhase.current * 1.5) * 2;
+          const bracketLen = 5;
+          const angle = pulsePhase.current * 0.8;
+
+          ctx.strokeStyle = `rgba(129, 140, 248, 0.5)`;
+          ctx.lineWidth = 1;
+          ctx.shadowBlur = 4;
+
+          for (let corner = 0; corner < 4; corner++) {
+            const a = angle + (corner * Math.PI) / 2;
+            const cx = x + Math.cos(a) * r;
+            const cy = y + Math.sin(a) * r;
+            const perpA = a + Math.PI / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(
+              cx + Math.cos(perpA) * bracketLen,
+              cy + Math.sin(perpA) * bracketLen
+            );
+            ctx.lineTo(cx, cy);
+            ctx.lineTo(
+              cx - Math.cos(perpA) * bracketLen,
+              cy - Math.sin(perpA) * bracketLen
+            );
+            ctx.stroke();
+          }
+        }
+
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
-      } else {
-        trail.current = [];
       }
 
       raf.current = requestAnimationFrame(animate);
