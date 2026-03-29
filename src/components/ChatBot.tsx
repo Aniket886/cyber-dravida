@@ -150,15 +150,15 @@ const ChatBot = () => {
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 px-4 py-3">
-              <div className="space-y-3">
+            <ScrollArea className="flex-1 px-4 py-3 overflow-hidden">
+              <div className="space-y-3 min-w-0">
                 {messages.map((msg, i) => (
                   <div
                     key={i}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                      className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed break-words overflow-hidden ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
