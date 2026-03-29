@@ -190,7 +190,7 @@ const Courses = () => {
                   <div className="flex items-center gap-4 pt-2">
                     <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
                       <Users size={14} />
-                      6+ Students Enrolled
+                      50+ Students Enrolled
                     </div>
                     <Stars />
                   </div>
