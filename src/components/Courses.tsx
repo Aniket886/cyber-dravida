@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import { Check, Star, Users, Quote, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
