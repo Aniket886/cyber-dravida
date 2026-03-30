@@ -230,15 +230,24 @@ const Courses = () => {
                     {p.popular && (
                       <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>
                     )}
+                    {(p as any).comingSoon && (
+                      <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
+                    )}
                   </div>
                   <h3 className="font-heading font-semibold text-heading text-base">{p.title}</h3>
                   <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
                   <PriceDisplay price={p.price} inView={inView} />
-                  <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10 mt-auto" asChild>
-                    <a href={p.link} target="_blank" rel="noopener noreferrer">
-                      Get Access <ExternalLink size={14} className="ml-1" />
-                    </a>
-                  </Button>
+                  {(p as any).comingSoon ? (
+                    <Button variant="outline" className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto" disabled>
+                      Coming Soon
+                    </Button>
+                  ) : (
+                    <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10 mt-auto" asChild>
+                      <a href={p.link} target="_blank" rel="noopener noreferrer">
+                        Get Access <ExternalLink size={14} className="ml-1" />
+                      </a>
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
