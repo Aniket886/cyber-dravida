@@ -92,6 +92,22 @@ const products = [
     popular: false,
     comingSoon: true,
   },
+  {
+    tag: "Antivirus",
+    tagColor: "bg-destructive/20 text-destructive",
+    title: "Bitdefender Antivirus Plus (1 Year – 1 Device)",
+    desc: "Top-rated antivirus protection for your PC. Covers ransomware, phishing & online threats for 1 year.",
+    price: 799,
+    link: "https://topmate.io/cyberdravida",
+  },
+  {
+    tag: "Antivirus",
+    tagColor: "bg-destructive/20 text-destructive",
+    title: "Bitdefender Mobile Security (1 Year – 1 Device)",
+    desc: "Complete mobile protection — malware scanner, web security & anti-theft for Android/iOS.",
+    price: 299,
+    link: "https://topmate.io/cyberdravida",
+  },
 ];
 
 const testimonials = [
