@@ -296,14 +296,8 @@ const Courses = () => {
           </Card>
         </motion.div>
 
-        {/* Product Grid - Desktop */}
-        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-          {products.map((p, i) => (
-            <motion.div key={p.title} {...fadeUp(0.1 + i * 0.08)}>
-              <ProductCard p={p} inView={inView} />
-            </motion.div>
-          ))}
-        </div>
+        {/* Product Grid - Desktop/Tablet with pagination */}
+        <DesktopProductGrid products={products} inView={inView} />
 
         {/* Product Carousel - Mobile */}
         <div className="sm:hidden mb-12">
