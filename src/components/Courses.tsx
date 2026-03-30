@@ -90,7 +90,7 @@ const products = [
     price: 9,
     link: "#",
     popular: false,
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     tag: "Antivirus",
