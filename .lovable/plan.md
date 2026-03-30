@@ -1,50 +1,96 @@
 
 
-## Enrich Dravida AI System Prompt with Full Website Knowledge
+## Admin Panel for Cyber Dravida — Full CMS via localStorage
 
-### Problem
-The chatbot's system prompt only has a one-line description of Cyber Dravida. When users ask about services, courses, pricing, events, team, or blog content, the AI can't answer accurately because it doesn't know this information.
+### Overview
+Build a complete admin dashboard at `/admin` that allows editing every section of the website. All data stored in localStorage via React Context. No backend, no database.
 
-### Solution
-Expand the `SYSTEM_PROMPT` in `api/chat.ts` to include a comprehensive knowledge base of all frontend content — services, courses with prices and links, events, team info, stats, blog topics, and contact details. No code or API key info will be included.
+### Architecture
 
-### Changes — `api/chat.ts` only
+```text
+SiteDataContext (wraps entire app)
+    ├── Reads defaults from src/data/siteData.ts
+    ├── On mount: merges localStorage overrides
+    ├── Provides getter + setter for each section
+    └── Persists every update to localStorage
 
-Update the `SYSTEM_PROMPT` constant to include:
+Routes:
+  /         → Main site (reads from context)
+  /admin    → Password-gated admin panel
+```
 
-**About**: Karnataka-based org founded Sep 2025 by Aniket Tegginamath (CEH, TryHackMe Top 1%, OSINT Researcher). Mission: close cybersecurity awareness gap in Tier-2 India.
+### Files to Create
 
-**Services** (with subpage links):
-- Cybersecurity Training → /services/cybersecurity-training
-- Awareness Outreach → /services/awareness-outreach
-- CTF Competitions → /services/ctf-competitions
-- OSINT & Investigation → /services/osint-investigation
+**1. `src/data/siteData.ts`** — Default content objects
+- Extracts ALL hardcoded data from Hero, About, Services, Courses, Stats, Events, Team, Blog, Contact, Footer, ChatBot into typed default objects
+- Each section has its own typed interface
 
-**Courses & Products** (with Topmate links and prices):
-- Featured: Advanced OSINT Investigation Course — ₹4,999 (topmate.io/cyberdravida/1411837)
-- Android Hacking 101 — ₹2,999
-- Professional Credential Recovery Tool — ₹999
-- Data Recovery from HDD/SSD/Pendrive — ₹699
-- Android Gallery Analysis — ₹666
-- 1:1 Cyber Career Roadmap (10-min call, Kannada/Hindi) — ₹99
+**2. `src/contexts/SiteDataContext.tsx`** — React Context + Provider
+- Loads defaults, merges with localStorage on mount
+- `updateSection(key, data)` saves to state + localStorage
+- `resetSection(key)` and `resetAll()` methods
+- Wraps entire app in `App.tsx`
 
-**Events**:
-- Upcoming: Cyber Awareness Workshop (Apr 2026, GM University Davangere)
-- Upcoming: CTF Challenge — Dravida Cup (May 2026, Online)
-- Past: Cybersecurity Orientation (Oct 2025, Davangere)
+**3. `src/pages/AdminLogin.tsx`** — Password gate
+- Dark minimal login screen, single password field
+- Hardcoded password: `"cyberdravida2025"`
+- Sets `sessionStorage.setItem("cd-admin", "1")` on success
+- Redirects to admin dashboard
 
-**Stats**: 500+ students trained, 10+ events, 5+ colleges, 1 year active
+**4. `src/pages/AdminPanel.tsx`** — Dashboard layout
+- Mobile blocker: shows "Please use desktop" on `<768px`
+- Left sidebar with 11 section links
+- Top bar: logo + "Cyber Dravida Admin" + Logout button
+- Floating "Back to Site →" link
+- Renders selected section editor in main area
 
-**Team**: Aniket Tegginamath — Founder & Lead Researcher. Tags: CEH, OSINT, TryHackMe Top 1%, CCI, Ethical Hacking Mentor. Links: LinkedIn (linkedin.com/in/aniket-tegginamath), TryHackMe (tryhackme.com/p/D4rkMatrix), Linktree (linktr.ee/anikettegginamath)
+**5. `src/components/admin/` — 11 Editor components
+- `HeroEditor.tsx` — text inputs for badge, heading lines, subheading, CTA texts, stat pills
+- `AboutEditor.tsx` — heading, paragraphs, feature rows (add/remove, min 1 max 8)
+- `ServicesEditor.tsx` — card list with title/desc/icon editing, add/remove/reorder
+- `CoursesEditor.tsx` — featured course fields, product grid CRUD, testimonial, bottom CTA
+- `StatsEditor.tsx` — stat value/label editing, add/remove (min 1 max 8)
+- `EventsEditor.tsx` — event CRUD with status/title/date/location/desc/link
+- `TeamEditor.tsx` — member CRUD with avatar base64 upload, links, tags, bottom text
+- `BlogEditor.tsx` — post CRUD with tag/title/excerpt/link/author/readtime, bottom URL
+- `ContactEditor.tsx` — email, address, website, response time, LinkedIn URL, success message
+- `FooterEditor.tsx` — tagline, copyright, nav links
+- `ChatbotEditor.tsx` — bot name, subtitle, welcome message, system prompt, on/off toggle
 
-**Blog topics**: OSINT tools, TryHackMe journey, phishing evolution (linked to Medium: medium.com/@anikettegginamath)
+Each editor:
+- Pre-fills current values from context
+- "Save Changes" button (indigo glow) → updates context + localStorage + green toast
+- "Reset to Defaults" button → resets that section
+- Unsaved changes warning (yellow toast on navigate)
+- Delete/remove actions use AlertDialog confirmation
 
-**Contact**: cyberdravida@gmail.com, website: cyberdravida.in
+### Files to Modify
 
-**Values**: Awareness First, Practical Training, Community Driven, Karnataka Focused
+**`src/App.tsx`**
+- Wrap everything in `SiteDataProvider`
+- Add `/admin` route (checks sessionStorage, shows login or panel)
 
-The prompt will instruct the AI to answer any question about the website content accurately and provide relevant Topmate/service links when asked about courses or enrollment.
+**All 11 section components** (Hero, About, Services, Courses, Stats, Events, Team, Blog, Contact, Footer, ChatBot)
+- Replace hardcoded data with `useSiteData()` context hook
+- Keep all animations, styling, and logic identical
 
-### Files Changed
-- `api/chat.ts` — Expand `SYSTEM_PROMPT` with full website knowledge base
+**`src/components/Footer.tsx`**
+- Add tiny "Admin" link (11px, color #1e1e2e) linking to `/admin`
+
+### Key Design Decisions
+- Password stored as a constant in AdminLogin — simple client-side gate, not real auth
+- Base64 image storage for team avatars (localStorage limit ~5MB, sufficient for a few photos)
+- Reorder via up/down arrow buttons (simpler than drag-and-drop)
+- Admin panel uses same dark design system: bg `#080808`/`#13131a`, border `#1e1e2e`, text `#cbd5e1`, focus `#6366f1`
+- No animations in admin — clean and functional
+- Global "Reset All" button in sidebar footer
+
+### Implementation Order
+1. Create `siteData.ts` with all defaults + types
+2. Create `SiteDataContext.tsx`
+3. Create `AdminLogin.tsx` + `AdminPanel.tsx` layout
+4. Create all 11 editors
+5. Update all section components to read from context
+6. Update `App.tsx` with routes and provider
+7. Add admin link to Footer
 
