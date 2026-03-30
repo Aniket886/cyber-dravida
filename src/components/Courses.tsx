@@ -170,7 +170,7 @@ const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
   </Card>
 );
 
-const ProductCarousel = ({ products, inView }: { products: typeof import("./Courses").default extends never ? any[] : any[]; inView: boolean }) => {
+const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolean }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
