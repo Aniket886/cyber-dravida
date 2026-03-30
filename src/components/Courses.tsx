@@ -217,7 +217,7 @@ const ProductCarousel = ({ products, inView }: { products: typeof import("./Cour
     </div>
   );
 };
-
+const Courses = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
