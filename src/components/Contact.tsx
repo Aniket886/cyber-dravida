@@ -100,54 +100,8 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Left — Info */}
-          <motion.div {...fadeUp(0.1)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
-            <div className="space-y-6">
-              {contactInfo.map((item) => {
-                const Icon = item.icon;
-                const content = (
-                  <div className="flex items-center gap-4" key={item.label}>
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-foreground/50 uppercase tracking-wide">{item.label}</p>
-                      <p className="text-foreground text-sm font-medium">{item.value}</p>
-                    </div>
-                  </div>
-                );
-                return item.href ? (
-                  <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="block hover:opacity-80 transition-opacity">
-                    {content}
-                  </a>
-                ) : (
-                  content
-                );
-              })}
-            </div>
-
-            {/* Socials */}
-            <div className="mt-8 pt-6 border-t border-border">
-              <p className="text-foreground/50 text-xs uppercase tracking-wide mb-3">Follow Us</p>
-              <div className="flex gap-3">
-                {socials.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                  >
-                    <s.icon className="h-4 w-4 text-primary" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right — Form */}
-          <motion.div {...fadeUp(0.2)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8">
+          {/* Left — Form */}
+          <motion.div {...fadeUp(0.1)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
@@ -208,6 +162,52 @@ const Contact = () => {
                 </Button>
               </form>
             </Form>
+          </motion.div>
+
+          {/* Right — Info */}
+          <motion.div {...fadeUp(0.2)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
+            <div className="space-y-6">
+              {contactInfo.map((item) => {
+                const Icon = item.icon;
+                const content = (
+                  <div className="flex items-center gap-4" key={item.label}>
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 uppercase tracking-wide">{item.label}</p>
+                      <p className="text-foreground text-sm font-medium">{item.value}</p>
+                    </div>
+                  </div>
+                );
+                return item.href ? (
+                  <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="block hover:opacity-80 transition-opacity">
+                    {content}
+                  </a>
+                ) : (
+                  content
+                );
+              })}
+            </div>
+
+            {/* Socials */}
+            <div className="mt-8 pt-6 border-t border-border">
+              <p className="text-foreground/50 text-xs uppercase tracking-wide mb-3">Follow Us</p>
+              <div className="flex gap-3">
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
+                  >
+                    <s.icon className="h-4 w-4 text-primary" />
+                  </a>
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
