@@ -140,6 +140,83 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
   );
 };
 
+const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
+  <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full flex flex-col">
+    <CardContent className="p-6 flex flex-col flex-1 gap-3">
+      <div className="flex items-center gap-2">
+        <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
+        {p.popular && (
+          <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>
+        )}
+        {(p as any).comingSoon && (
+          <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
+        )}
+      </div>
+      <h3 className="font-heading font-semibold text-heading text-base">{p.title}</h3>
+      <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
+      <PriceDisplay price={p.price} inView={inView} />
+      {(p as any).comingSoon ? (
+        <Button variant="outline" className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto" disabled>
+          Coming Soon
+        </Button>
+      ) : (
+        <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10 mt-auto" asChild>
+          <a href={p.link} target="_blank" rel="noopener noreferrer">
+            Get Access <ExternalLink size={14} className="ml-1" />
+          </a>
+        </Button>
+      )}
+    </CardContent>
+  </Card>
+);
+
+const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolean }) => {
+  const [api, setApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const onSlideSelect = useCallback(() => {
+    if (!api) return;
+    setCurrentSlide(api.selectedScrollSnap());
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+    onSlideSelect();
+    api.on("select", onSlideSelect);
+    return () => { api.off("select", onSlideSelect); };
+  }, [api, onSlideSelect]);
+
+  return (
+    <div>
+      <Carousel
+        setApi={setApi}
+        plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]}
+        opts={{ loop: true, align: "center" }}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-3">
+          {products.map((p: any) => (
+            <CarouselItem key={p.title} className="pl-3 basis-[85%]">
+              <ProductCard p={p} inView={inView} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+      <div className="flex justify-center gap-2 mt-4">
+        {products.map((_: any, index: number) => (
+          <button
+            key={index}
+            onClick={() => api?.scrollTo(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              currentSlide === index ? "bg-primary w-6" : "bg-muted-foreground/30"
+            }`}
+            aria-label={`Go to product ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 const Courses = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -219,39 +296,18 @@ const Courses = () => {
           </Card>
         </motion.div>
 
-        {/* Product Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+        {/* Product Grid - Desktop */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
           {products.map((p, i) => (
             <motion.div key={p.title} {...fadeUp(0.1 + i * 0.08)}>
-              <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full flex flex-col">
-                <CardContent className="p-6 flex flex-col flex-1 gap-3">
-                  <div className="flex items-center gap-2">
-                    <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
-                    {p.popular && (
-                      <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>
-                    )}
-                    {(p as any).comingSoon && (
-                      <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
-                    )}
-                  </div>
-                  <h3 className="font-heading font-semibold text-heading text-base">{p.title}</h3>
-                  <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
-                  <PriceDisplay price={p.price} inView={inView} />
-                  {(p as any).comingSoon ? (
-                    <Button variant="outline" className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto" disabled>
-                      Coming Soon
-                    </Button>
-                  ) : (
-                    <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10 mt-auto" asChild>
-                      <a href={p.link} target="_blank" rel="noopener noreferrer">
-                        Get Access <ExternalLink size={14} className="ml-1" />
-                      </a>
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
+              <ProductCard p={p} inView={inView} />
             </motion.div>
           ))}
+        </div>
+
+        {/* Product Carousel - Mobile */}
+        <div className="sm:hidden mb-12">
+          <ProductCarousel products={products} inView={inView} />
         </div>
 
         {/* Bottom CTA */}
