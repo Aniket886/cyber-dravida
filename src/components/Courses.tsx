@@ -88,7 +88,7 @@ const products = [
     title: "How to Create TG Bot & Setup Your Own AI Agent Locally",
     desc: "Learn to build Telegram bots and run your own AI agent on your local system — step by step guide.",
     price: 9,
-    link: "#",
+    link: "https://topmate.io/cyberdravida/2025133",
     popular: false,
     comingSoon: false,
   },
@@ -150,7 +150,9 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
   const count = usePriceCountUp(price, inView);
   const formatted = count.toLocaleString("en-IN");
   return (
-    <span className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${large ? "text-3xl sm:text-4xl" : "text-xl"}`}>
+    <span
+      className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${large ? "text-3xl sm:text-4xl" : "text-xl"}`}
+    >
       ₹{formatted}
     </span>
   );
@@ -161,9 +163,7 @@ const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
     <CardContent className="p-6 flex flex-col flex-1 gap-3">
       <div className="flex items-center gap-2">
         <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
-        {p.popular && (
-          <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>
-        )}
+        {p.popular && <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>}
         {(p as any).comingSoon && (
           <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
         )}
@@ -172,7 +172,11 @@ const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
       <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
       <PriceDisplay price={p.price} inView={inView} />
       {(p as any).comingSoon ? (
-        <Button variant="outline" className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto" disabled>
+        <Button
+          variant="outline"
+          className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto"
+          disabled
+        >
           Coming Soon
         </Button>
       ) : (
@@ -199,7 +203,9 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
     if (!api) return;
     onSlideSelect();
     api.on("select", onSlideSelect);
-    return () => { api.off("select", onSlideSelect); };
+    return () => {
+      api.off("select", onSlideSelect);
+    };
   }, [api, onSlideSelect]);
 
   return (
@@ -239,10 +245,7 @@ const ITEMS_PER_PAGE = 6;
 const DesktopProductGrid = ({ products, inView }: { products: any[]; inView: boolean }) => {
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
-  const paged = useMemo(
-    () => products.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE),
-    [products, page]
-  );
+  const paged = useMemo(() => products.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE), [products, page]);
 
   return (
     <div className="hidden sm:block mb-12">
@@ -304,7 +307,9 @@ const Courses = () => {
     if (!carouselApi) return;
     onSelect();
     carouselApi.on("select", onSelect);
-    return () => { carouselApi.off("select", onSelect); };
+    return () => {
+      carouselApi.off("select", onSelect);
+    };
   }, [carouselApi, onSelect]);
 
   return (
@@ -316,14 +321,17 @@ const Courses = () => {
             Learn With Us
           </h2>
           <p className="text-foreground/60 max-w-xl mx-auto">
-            Premium courses, tools, and resources to level up your cybersecurity skills. All products delivered via Topmate.
+            Premium courses, tools, and resources to level up your cybersecurity skills. All products delivered via
+            Topmate.
           </p>
         </motion.div>
 
         {/* Featured Course */}
         <motion.div {...fadeUp(0.1)}>
-          <Card className="bg-card border-border relative overflow-hidden mb-10"
-            style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}>
+          <Card
+            className="bg-card border-border relative overflow-hidden mb-10"
+            style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}
+          >
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary" />
             <CardContent className="p-6 sm:p-8">
               <Badge className="mb-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground border-0">
@@ -336,7 +344,8 @@ const Courses = () => {
                     Advanced OSINT Investigation Course (ಕನ್ನಡ)
                   </h3>
                   <p className="text-foreground/60 text-sm leading-relaxed">
-                    Master digital forensics, crypto tracking, and the darkweb. A practical roadmap to professional intelligence — taught entirely in Kannada.
+                    Master digital forensics, crypto tracking, and the darkweb. A practical roadmap to professional
+                    intelligence — taught entirely in Kannada.
                   </p>
                   <ul className="space-y-2">
                     {featuredFeatures.map((f) => (
@@ -401,12 +410,8 @@ const Courses = () => {
                     <CardContent className="p-8 space-y-4">
                       <Quote size={32} className="text-muted-foreground/30 mx-auto" />
                       <Stars />
-                      <p className="text-foreground/80 italic leading-relaxed">
-                        "{t.quote}"
-                      </p>
-                      <p className="text-muted-foreground text-sm italic">
-                        "{t.translation}"
-                      </p>
+                      <p className="text-foreground/80 italic leading-relaxed">"{t.quote}"</p>
+                      <p className="text-muted-foreground text-sm italic">"{t.translation}"</p>
                       <p className="text-muted-foreground text-sm font-medium">— {t.author}</p>
                     </CardContent>
                   </Card>
