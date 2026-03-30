@@ -140,7 +140,7 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
   );
 };
 
-const ProductCard = ({ p, inView }: { p: typeof products[number] & { comingSoon?: boolean }; inView: boolean }) => (
+const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
   <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full flex flex-col">
     <CardContent className="p-6 flex flex-col flex-1 gap-3">
       <div className="flex items-center gap-2">
