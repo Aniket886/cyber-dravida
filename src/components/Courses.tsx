@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
-import { Check, Star, Users, Quote, ExternalLink } from "lucide-react";
+import { Check, Star, Users, Quote, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -217,6 +217,62 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
     </div>
   );
 };
+
+const ITEMS_PER_PAGE = 6;
+
+const DesktopProductGrid = ({ products, inView }: { products: any[]; inView: boolean }) => {
+  const [page, setPage] = useState(0);
+  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+  const paged = useMemo(
+    () => products.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE),
+    [products, page]
+  );
+
+  return (
+    <div className="hidden sm:block mb-12">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {paged.map((p, i) => (
+          <motion.div key={p.title} {...fadeUp(0.05 + i * 0.05)}>
+            <ProductCard p={p} inView={inView} />
+          </motion.div>
+        ))}
+      </div>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-3 mt-6">
+          <Button
+            variant="outline"
+            size="icon"
+            className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8"
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={page === 0}
+          >
+            <ChevronLeft size={16} />
+          </Button>
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                page === i ? "bg-primary w-6" : "bg-muted-foreground/30"
+              }`}
+              aria-label={`Page ${i + 1}`}
+            />
+          ))}
+          <Button
+            variant="outline"
+            size="icon"
+            className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8"
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={page === totalPages - 1}
+          >
+            <ChevronRight size={16} />
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Courses = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -296,14 +352,8 @@ const Courses = () => {
           </Card>
         </motion.div>
 
-        {/* Product Grid - Desktop */}
-        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-          {products.map((p, i) => (
-            <motion.div key={p.title} {...fadeUp(0.1 + i * 0.08)}>
-              <ProductCard p={p} inView={inView} />
-            </motion.div>
-          ))}
-        </div>
+        {/* Product Grid - Desktop/Tablet with pagination */}
+        <DesktopProductGrid products={products} inView={inView} />
 
         {/* Product Carousel - Mobile */}
         <div className="sm:hidden mb-12">
