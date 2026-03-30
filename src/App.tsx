@@ -9,9 +9,11 @@ import ScrollToTop from "@/components/ScrollToTop";
 import CustomCursor from "@/components/CustomCursor";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { SiteDataProvider } from "@/contexts/SiteDataContext";
 import Index from "./pages/Index.tsx";
 import ServicePage from "./pages/ServicePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import AdminRoute from "./pages/AdminRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -22,20 +24,23 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <CustomCursor />
-        {loading && <LoadingScreen onDone={handleDone} />}
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/services/:slug" element={<ServicePage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-        <Analytics />
-        <SpeedInsights />
+        <SiteDataProvider>
+          <Toaster />
+          <Sonner />
+          <CustomCursor />
+          {loading && <LoadingScreen onDone={handleDone} />}
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/services/:slug" element={<ServicePage />} />
+              <Route path="/admin" element={<AdminRoute />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <Analytics />
+          <SpeedInsights />
+        </SiteDataProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { useSiteData } from "@/contexts/SiteDataContext";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -27,15 +28,8 @@ const fadeUp = (delay: number) => ({
   transition: { duration: 0.5, delay, ease: "easeOut" as const },
 });
 
-const contactInfo = [
-  { icon: Mail, label: "Email", value: "cyberdravida@gmail.com", href: "mailto:cyberdravida@gmail.com" },
-  { icon: MapPin, label: "Location", value: "Karnataka, India", href: undefined },
-  { icon: Globe, label: "Website", value: "cyberdravida.in", href: "https://www.cyberdravida.in/" },
-];
-
 const socials = [
   { icon: Instagram, href: "https://instagram.com/cyberdravida", label: "Instagram" },
-  { icon: Linkedin, href: "https://linkedin.com/company/cyberdravida", label: "LinkedIn" },
   { icon: Twitter, href: "https://twitter.com/cyberdravida", label: "X / Twitter" },
 ];
 
@@ -44,12 +38,26 @@ const Contact = () => {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
   const isMobile = useIsMobile();
+  const { data } = useSiteData();
+  const contact = data.contact;
+
+  const contactInfo = [
+    { icon: Mail, label: "Email", value: contact.email, href: `mailto:${contact.email}` },
+    { icon: MapPin, label: "Location", value: contact.location, href: undefined },
+    { icon: Globe, label: "Website", value: contact.website, href: contact.websiteUrl },
+  ];
+
+  const allSocials = [
+    ...socials,
+    { icon: Linkedin, href: contact.linkedinUrl, label: "LinkedIn" },
+  ];
+
   const form = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
   });
 
-  const onSubmit = async (data: ContactForm) => {
+  const onSubmit = async (formData: ContactForm) => {
     if (!captchaToken) {
       toast({ title: "Please complete the captcha", variant: "destructive" });
       return;
@@ -62,15 +70,15 @@ const Contact = () => {
         body: JSON.stringify({
           access_key: "4778d335-d991-4bb0-9e1c-40a995012eda",
           subject: "New Contact from Cyber Dravida Website",
-          name: data.name,
-          email: data.email,
-          message: data.message,
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
           "h-captcha-response": captchaToken,
         }),
       });
       const result = await res.json();
       if (result.success) {
-        toast({ title: "Message sent!", description: "We'll get back to you soon." });
+        toast({ title: contact.successMessage, description: contact.successDescription });
         form.reset();
         setCaptchaToken(null);
         captchaRef.current?.resetCaptcha();
@@ -87,7 +95,6 @@ const Contact = () => {
   return (
     <section id="contact" className="py-20 overflow-x-hidden">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
         <motion.div className="text-center mb-14" {...fadeUp(0)}>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-[#a855f7] via-[#6366f1] to-[#06b6d4] bg-clip-text text-transparent">
@@ -100,60 +107,22 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Left — Form */}
           <motion.div {...fadeUp(0.1)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="you@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Your message..." rows={5} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <FormField control={form.control} name="name" render={({ field }) => (
+                  <FormItem><FormLabel>Name</FormLabel><FormControl><Input placeholder="Your name" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="message" render={({ field }) => (
+                  <FormItem><FormLabel>Message</FormLabel><FormControl><Textarea placeholder="Your message..." rows={5} {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
                 <div className="w-full flex justify-center min-h-[78px] overflow-hidden">
                   <div className="w-fit max-w-full">
-                    <HCaptcha
-                      sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                      size={isMobile ? "compact" : "normal"}
-                      onVerify={(token) => setCaptchaToken(token)}
-                      onExpire={() => setCaptchaToken(null)}
-                      ref={captchaRef}
-                      theme="dark"
-                    />
+                    <HCaptcha sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2" size={isMobile ? "compact" : "normal"} onVerify={(token) => setCaptchaToken(token)} onExpire={() => setCaptchaToken(null)} ref={captchaRef} theme="dark" />
                   </div>
                 </div>
                 <Button type="submit" size="lg" className="w-full glow-btn gap-2" disabled={loading || !captchaToken}>
@@ -164,7 +133,6 @@ const Contact = () => {
             </Form>
           </motion.div>
 
-          {/* Right — Info */}
           <motion.div {...fadeUp(0.2)} className="min-w-0 bg-card border border-border rounded-xl p-6 sm:p-8 flex flex-col justify-between">
             <div className="space-y-6">
               {contactInfo.map((item) => {
@@ -181,42 +149,26 @@ const Contact = () => {
                   </div>
                 );
                 return item.href ? (
-                  <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="block hover:opacity-80 transition-opacity">
-                    {content}
-                  </a>
-                ) : (
-                  content
-                );
+                  <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="block hover:opacity-80 transition-opacity">{content}</a>
+                ) : content;
               })}
             </div>
 
-            {/* Map */}
             <div className="mt-6 rounded-lg overflow-hidden border border-border">
               <iframe
                 title="Cyber Dravida Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497511.23481385025!2d74.00600472656247!3d15.350084200000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb1e2e710ab8f%3A0x4ef5ab20ca053e9d!2sKarnataka%2C%20India!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                width="100%"
-                height="180"
+                width="100%" height="180"
                 style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.1)" }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
 
-            {/* Socials */}
             <div className="mt-8 pt-6 border-t border-border">
               <p className="text-foreground/50 text-xs uppercase tracking-wide mb-3">Follow Us</p>
               <div className="flex gap-3">
-                {socials.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                  >
+                {allSocials.map((s) => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors">
                     <s.icon className="h-4 w-4 text-primary" />
                   </a>
                 ))}

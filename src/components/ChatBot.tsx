@@ -4,19 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSiteData } from "@/contexts/SiteDataContext";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const MAX_MESSAGE_LENGTH = 500;
 const STORAGE_KEY = "dravida-ai-chat";
 
-const INITIAL_MESSAGE: Message = {
-  role: "assistant",
-  content:
-    "Hey! 👋 I'm Dravida AI, your cybersecurity guide. Ask me anything about ethical hacking, OSINT, staying safe online, or Cyber Dravida's programs!",
-};
-
-function loadMessages(): Message[] {
+function loadMessages(welcomeMessage: string): Message[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -24,7 +19,7 @@ function loadMessages(): Message[] {
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch {}
-  return [INITIAL_MESSAGE];
+  return [{ role: "assistant", content: welcomeMessage }];
 }
 
 function saveMessages(msgs: Message[]) {
@@ -34,23 +29,22 @@ function saveMessages(msgs: Message[]) {
 }
 
 const ChatBot = () => {
+  const { data } = useSiteData();
+  const chatbot = data.chatbot;
+
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>(loadMessages);
+  const [messages, setMessages] = useState<Message[]>(() => loadMessages(chatbot.welcomeMessage));
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Persist messages to localStorage
-  useEffect(() => {
-    saveMessages(messages);
-  }, [messages]);
+  useEffect(() => { saveMessages(messages); }, [messages]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, loading]);
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  if (!chatbot.enabled) return null;
 
   const clearChat = () => {
-    setMessages([INITIAL_MESSAGE]);
+    setMessages([{ role: "assistant", content: chatbot.welcomeMessage }]);
     localStorage.removeItem(STORAGE_KEY);
   };
 
@@ -68,36 +62,20 @@ const ChatBot = () => {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: updated.map((m) => ({ role: m.role, content: m.content })),
-        }),
+        body: JSON.stringify({ messages: updated.map((m) => ({ role: m.role, content: m.content })) }),
       });
 
       if (res.status === 429) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: "You're sending messages too fast. Please wait a moment and try again.",
-          },
-        ]);
+        setMessages((prev) => [...prev, { role: "assistant", content: "You're sending messages too fast. Please wait a moment and try again." }]);
         return;
       }
-
       if (!res.ok) throw new Error("API error");
 
-      const data = await res.json();
-      const reply =
-        data.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response.";
+      const responseData = await res.json();
+      const reply = responseData.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response.";
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Sorry, I'm having trouble connecting. Please try again!",
-        },
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again!" }]);
     } finally {
       setLoading(false);
     }
@@ -107,7 +85,6 @@ const ChatBot = () => {
 
   return (
     <>
-      {/* Floating button */}
       <button
         onClick={() => setOpen((v) => !v)}
         className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary flex items-center justify-center shadow-[0_0_20px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.6)] transition-shadow animate-pulse"
@@ -116,7 +93,6 @@ const ChatBot = () => {
         <MessageCircle className="text-primary-foreground" size={26} />
       </button>
 
-      {/* Chat panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -126,44 +102,25 @@ const ChatBot = () => {
             transition={{ duration: 0.25 }}
             className="fixed bottom-24 right-6 z-50 w-[350px] max-w-[calc(100vw-2rem)] h-[480px] max-h-[70vh] rounded-2xl border border-border bg-card flex flex-col overflow-hidden shadow-2xl"
           >
-            {/* Header */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card">
-              <img src="/CDTRANS.png" alt="Dravida AI" className="h-7 w-7 object-contain" />
+              <img src="/CDTRANS.png" alt={chatbot.botName} className="h-7 w-7 object-contain" />
               <div className="flex-1">
-                <p className="text-sm font-bold font-heading text-foreground">Dravida AI</p>
-                <p className="text-[11px] text-muted-foreground">Cybersecurity Assistant</p>
+                <p className="text-sm font-bold font-heading text-foreground">{chatbot.botName}</p>
+                <p className="text-[11px] text-muted-foreground">{chatbot.subtitle}</p>
               </div>
-              <button
-                onClick={clearChat}
-                className="text-muted-foreground hover:text-destructive transition-colors mr-1"
-                aria-label="Clear chat"
-                title="Clear chat"
-              >
+              <button onClick={clearChat} className="text-muted-foreground hover:text-destructive transition-colors mr-1" aria-label="Clear chat" title="Clear chat">
                 <Trash2 size={16} />
               </button>
-              <button
-                onClick={() => setOpen(false)}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
                 <X size={18} />
               </button>
             </div>
 
-            {/* Messages */}
             <ScrollArea className="flex-1 px-4 py-3 overflow-hidden">
               <div className="space-y-3 min-w-0">
                 {messages.map((msg, i) => (
-                  <div
-                    key={i}
-                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div
-                      className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed break-words overflow-hidden ${
-                        msg.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-foreground"
-                      }`}
-                    >
+                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className={`max-w-[80%] rounded-xl px-3 py-2 text-sm leading-relaxed break-words overflow-hidden ${msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
                       {msg.content}
                     </div>
                   </div>
@@ -181,7 +138,6 @@ const ChatBot = () => {
               </div>
             </ScrollArea>
 
-            {/* Input */}
             <div className="px-3 py-3 border-t border-border overflow-hidden">
               <div className="flex items-center gap-2 w-full min-w-0">
                 <Input
@@ -197,9 +153,7 @@ const ChatBot = () => {
                   <Send size={16} />
                 </Button>
               </div>
-              <p className="text-[10px] text-muted-foreground text-right mt-1">
-                {charCount}/{MAX_MESSAGE_LENGTH}
-              </p>
+              <p className="text-[10px] text-muted-foreground text-right mt-1">{charCount}/{MAX_MESSAGE_LENGTH}</p>
             </div>
           </motion.div>
         )}

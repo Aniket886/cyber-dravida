@@ -1,16 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-
-const stats = [
-  { value: 500, suffix: "+", label: "Students Trained" },
-  { value: 10, suffix: "+", label: "Events Conducted" },
-  { value: 5, suffix: "+", label: "Colleges Reached" },
-  { value: 1, suffix: "", label: "Year Active (Est. 2025)" },
-];
+import { useSiteData } from "@/contexts/SiteDataContext";
 
 function useCountUp(target: number, inView: boolean) {
   const [count, setCount] = useState(0);
-
   useEffect(() => {
     if (!inView) return;
     let frame = 0;
@@ -24,7 +17,6 @@ function useCountUp(target: number, inView: boolean) {
     };
     requestAnimationFrame(handle);
   }, [inView, target]);
-
   return count;
 }
 
@@ -50,32 +42,22 @@ const fadeUp = {
 const Stats = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
+  const { data } = useSiteData();
+  const stats = data.stats;
 
   return (
     <section id="stats" className="bg-[#0f0f16] relative">
-      {/* Top divider */}
       <div className="h-px w-full bg-primary/30 shadow-[0_0_8px_hsl(var(--primary)/0.3)]" />
-
       <div className="container mx-auto px-4 py-20">
-        <motion.h2
-          className="text-3xl sm:text-4xl font-bold font-heading text-center mb-14"
-          {...fadeUp}
-        >
-          Our Impact So Far
+        <motion.h2 className="text-3xl sm:text-4xl font-bold font-heading text-center mb-14" {...fadeUp}>
+          {stats.heading}
         </motion.h2>
-
-        <motion.div
-          ref={ref}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
-          {...fadeUp}
-        >
-          {stats.map((s) => (
+        <motion.div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto" {...fadeUp}>
+          {stats.items.map((s) => (
             <StatCard key={s.label} {...s} inView={inView} />
           ))}
         </motion.div>
       </div>
-
-      {/* Bottom divider */}
       <div className="h-px w-full bg-primary/30 shadow-[0_0_8px_hsl(var(--primary)/0.3)]" />
     </section>
   );

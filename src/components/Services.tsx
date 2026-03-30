@@ -1,38 +1,10 @@
 import { motion } from "framer-motion";
-import { Zap, Radio, Flag, Search } from "lucide-react";
+import { Zap, Radio, Flag, Search, type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
+import { useSiteData } from "@/contexts/SiteDataContext";
 
-const services = [
-  {
-    icon: Zap,
-    color: "text-secondary",
-    title: "Cybersecurity Training",
-    slug: "cybersecurity-training",
-    desc: "Structured courses covering ethical hacking, OSINT, network security, and digital forensics — from beginner to advanced.",
-  },
-  {
-    icon: Radio,
-    color: "text-primary",
-    title: "Awareness Outreach",
-    slug: "awareness-outreach",
-    desc: "Campus workshops, seminars, and awareness drives to educate students and institutions about cyber threats.",
-  },
-  {
-    icon: Flag,
-    color: "text-destructive",
-    title: "CTF Competitions",
-    slug: "ctf-competitions",
-    desc: "Participate in Capture the Flag challenges designed to sharpen your offensive and defensive security skills.",
-  },
-  {
-    icon: Search,
-    color: "text-secondary",
-    title: "OSINT & Investigation",
-    slug: "osint-investigation",
-    desc: "Learn open-source intelligence gathering and cyber crime investigation techniques used by real analysts.",
-  },
-];
+const iconMap: Record<string, LucideIcon> = { Zap, Radio, Flag, Search };
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
@@ -42,41 +14,37 @@ const fadeUp = (delay: number) => ({
 });
 
 const Services = () => {
+  const { data } = useSiteData();
+  const services = data.services;
+
   return (
     <section id="services" className="py-20">
       <div className="container mx-auto px-4">
-        {/* Heading */}
         <motion.div className="text-center mb-14" {...fadeUp(0)}>
-          <h2 className="text-3xl sm:text-4xl font-bold font-heading mb-3">
-            What We Do
-          </h2>
-          <p className="text-foreground/60 max-w-lg mx-auto">
-            Our programs are designed to take you from zero to security-ready.
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold font-heading mb-3">{services.heading}</h2>
+          <p className="text-foreground/60 max-w-lg mx-auto">{services.subheading}</p>
         </motion.div>
 
-        {/* Cards grid */}
         <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {services.map((s, i) => (
-            <motion.div key={s.title} {...fadeUp(0.1 + i * 0.1)}>
-              <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full">
-                <CardContent className="p-6 space-y-3">
-                  <div className={`p-2.5 rounded-lg bg-muted w-fit ${s.color}`}>
-                    <s.icon size={22} />
-                  </div>
-                  <h3 className="font-heading font-semibold text-heading text-lg">
-                    {s.title}
-                  </h3>
-                  <p className="text-foreground/60 text-sm leading-relaxed">
-                    {s.desc}
-                  </p>
-                  <Link to={`/services/${s.slug}`} className="text-primary text-sm font-medium inline-block hover:underline">
-                    Learn More →
-                  </Link>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+          {services.items.map((s, i) => {
+            const Icon = iconMap[s.icon] || Zap;
+            return (
+              <motion.div key={s.title} {...fadeUp(0.1 + i * 0.1)}>
+                <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full">
+                  <CardContent className="p-6 space-y-3">
+                    <div className={`p-2.5 rounded-lg bg-muted w-fit ${s.color}`}>
+                      <Icon size={22} />
+                    </div>
+                    <h3 className="font-heading font-semibold text-heading text-lg">{s.title}</h3>
+                    <p className="text-foreground/60 text-sm leading-relaxed">{s.desc}</p>
+                    <Link to={`/services/${s.slug}`} className="text-primary text-sm font-medium inline-block hover:underline">
+                      Learn More →
+                    </Link>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

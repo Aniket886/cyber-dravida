@@ -2,6 +2,7 @@ import { motion, type Easing } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
+import { useSiteData } from "@/contexts/SiteDataContext";
 
 const scrollTo = (id: string) => {
   const el = document.getElementById(id);
@@ -27,6 +28,8 @@ const particles = Array.from({ length: 15 }, (_, i) => ({
 }));
 
 const Hero = () => {
+  const { data } = useSiteData();
+  const hero = data.hero;
   const memoParticles = useMemo(() => particles, []);
 
   return (
@@ -81,7 +84,7 @@ const Hero = () => {
             variant="outline"
             className="mb-6 border-l-2 border-l-secondary border-y-border border-r-border bg-card/60 text-foreground px-4 py-1.5 text-xs tracking-wide"
           >
-            Karnataka's Cybersecurity Community
+            {hero.badgeText}
           </Badge>
         </motion.div>
 
@@ -90,10 +93,10 @@ const Hero = () => {
           className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
           {...fadeUp(0.15)}
         >
-          <span className="text-heading">Where Curiosity</span>
+          <span className="text-heading">{hero.headingLine1}</span>
           <br />
           <span className="bg-gradient-to-r from-[#a855f7] via-[#6366f1] to-[#06b6d4] bg-clip-text text-transparent">
-            Meets Cybersecurity.
+            {hero.headingLine2}
           </span>
         </motion.h1>
 
@@ -102,9 +105,7 @@ const Hero = () => {
           className="text-foreground/70 max-w-2xl mx-auto text-base sm:text-lg mb-8 leading-relaxed"
           {...fadeUp(0.3)}
         >
-          Cyber Dravida is a student-led cybersecurity organization focused on
-          training, awareness, and building a security-first mindset across
-          Karnataka.
+          {hero.subheading}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -117,7 +118,7 @@ const Hero = () => {
             className="glow-btn text-base px-8"
             onClick={() => scrollTo("services")}
           >
-            Explore Programs
+            {hero.cta1Text}
           </Button>
           <Button
             size="lg"
@@ -125,7 +126,7 @@ const Hero = () => {
             className="text-base px-8 border-border hover:bg-card"
             onClick={() => scrollTo("team")}
           >
-            Meet the Team
+            {hero.cta2Text}
           </Button>
         </motion.div>
 
@@ -134,7 +135,7 @@ const Hero = () => {
           className="flex flex-wrap items-center justify-center gap-3"
           {...fadeUp(0.6)}
         >
-          {["500+ Trained", "Karnataka Based", "Est. 2025"].map((stat) => (
+          {hero.statPills.map((stat) => (
             <span
               key={stat}
               className="bg-card/60 border border-border text-foreground/60 text-xs px-4 py-1.5 rounded-full"
