@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
-import { Check, Star, Users, Quote, ExternalLink } from "lucide-react";
+import { Check, Star, Users, Quote, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
