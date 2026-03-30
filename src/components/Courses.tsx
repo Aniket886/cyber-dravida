@@ -82,6 +82,16 @@ const products = [
     link: "https://topmate.io/cyberdravida/1879521",
     popular: true,
   },
+  {
+    tag: "Automation",
+    tagColor: "bg-primary/20 text-primary",
+    title: "How to Create TG Bot & Setup Your Own AI Agent Locally",
+    desc: "Learn to build Telegram bots and run your own AI agent on your local system — step by step guide.",
+    price: 9,
+    link: "#",
+    popular: false,
+    comingSoon: true,
+  },
 ];
 
 const testimonials = [
