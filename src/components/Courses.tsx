@@ -108,6 +108,38 @@ const products = [
     price: 299,
     link: "https://topmate.io/cyberdravida",
   },
+  {
+    tag: "Forensics",
+    tagColor: "bg-secondary/20 text-secondary",
+    title: "Digital Forensics & Evidence Collection",
+    desc: "Learn to collect, preserve and analyze digital evidence from devices and networks.",
+    price: 1999,
+    link: "https://topmate.io/cyberdravida",
+  },
+  {
+    tag: "Networking",
+    tagColor: "bg-primary/20 text-primary",
+    title: "Network Security Fundamentals",
+    desc: "Master firewalls, IDS/IPS, packet analysis and network hardening techniques.",
+    price: 1499,
+    link: "https://topmate.io/cyberdravida",
+  },
+  {
+    tag: "Bug Bounty",
+    tagColor: "bg-destructive/20 text-destructive",
+    title: "Bug Bounty Hunting for Beginners",
+    desc: "Start earning from bug bounties — learn recon, XSS, IDOR and responsible disclosure.",
+    price: 2499,
+    link: "https://topmate.io/cyberdravida",
+  },
+  {
+    tag: "Malware",
+    tagColor: "bg-secondary/20 text-secondary",
+    title: "Malware Analysis & Reverse Engineering",
+    desc: "Analyze real-world malware samples using static and dynamic analysis techniques.",
+    price: 3499,
+    link: "https://topmate.io/cyberdravida",
+  },
 ];
 
 const testimonials = [
