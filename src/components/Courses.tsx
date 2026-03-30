@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useSiteData } from "@/contexts/SiteDataContext";
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
@@ -32,144 +33,6 @@ function usePriceCountUp(target: number, inView: boolean) {
   return count;
 }
 
-const featuredFeatures = [
-  "Clear Web & Darkweb mastery",
-  "Real-world investigative skills",
-  "Crypto transaction tracking",
-  "Professional OpSec techniques",
-  "Pre-recorded — learn at your own pace",
-];
-
-const products = [
-  {
-    tag: "Hacking",
-    tagColor: "bg-primary/20 text-primary",
-    title: "Android Hacking 101: Hands-on for Beginners",
-    desc: "Master Android hacking basics with practical, hands-on exercises.",
-    price: 2999,
-    link: "https://topmate.io/cyberdravida/1879589",
-  },
-  {
-    tag: "Recovery",
-    tagColor: "bg-secondary/20 text-secondary",
-    title: "Professional Credential Recovery Tool",
-    desc: "Recover browser, Wi-Fi & Google-saved logins. Educational toolkit.",
-    price: 999,
-    link: "https://topmate.io/cyberdravida/1882129",
-  },
-  {
-    tag: "Recovery",
-    tagColor: "bg-secondary/20 text-secondary",
-    title: "Data Recovery from HDD, SSD, Pendrive, etc.",
-    desc: "Recover data from HDD, SSD, USB & SD Cards with professional tools.",
-    price: 699,
-    link: "https://topmate.io/cyberdravida/1880977",
-  },
-  {
-    tag: "Security",
-    tagColor: "bg-destructive/20 text-destructive",
-    title: "Android Gallery Analysis",
-    desc: "Educational guide on Android Gallery security flaws and analysis.",
-    price: 666,
-    link: "https://topmate.io/cyberdravida/1880974",
-  },
-  {
-    tag: "Mentorship",
-    tagColor: "bg-primary/20 text-primary",
-    title: "🚀 1:1 Cyber Career Roadmap (2026)",
-    desc: "Clear your hacking doubts in a personal 10-min video call. Available in Kannada and Hindi.",
-    price: 99,
-    link: "https://topmate.io/cyberdravida/1879521",
-    popular: true,
-  },
-  {
-    tag: "Automation",
-    tagColor: "bg-primary/20 text-primary",
-    title: "How to Create TG Bot & Setup Your Own AI Agent Locally",
-    desc: "Learn to build Telegram bots and run your own AI agent on your local system — step by step guide.",
-    price: 9,
-    link: "https://topmate.io/cyberdravida/2025133",
-    popular: false,
-    comingSoon: false,
-  },
-  {
-    tag: "Antivirus",
-    tagColor: "bg-destructive/20 text-destructive",
-    title: "Bitdefender Antivirus Plus (1 Year – 1 Device)",
-    desc: "Top-rated antivirus protection for your PC. Covers ransomware, phishing & online threats for 1 year.",
-    price: 799,
-    link: "https://topmate.io/cyberdravida",
-  },
-  {
-    tag: "Antivirus",
-    tagColor: "bg-destructive/20 text-destructive",
-    title: "Bitdefender Mobile Security (1 Year – 1 Device)",
-    desc: "Complete mobile protection — malware scanner, web security & anti-theft for Android/iOS.",
-    price: 299,
-    link: "https://topmate.io/cyberdravida",
-  },
-  {
-    tag: "Forensics",
-    tagColor: "bg-secondary/20 text-secondary",
-    title: "Digital Forensics & Evidence Collection",
-    desc: "Learn to collect, preserve and analyze digital evidence from devices and networks.",
-    price: 1999,
-    link: "https://topmate.io/cyberdravida",
-  },
-  {
-    tag: "Networking",
-    tagColor: "bg-primary/20 text-primary",
-    title: "Network Security Fundamentals",
-    desc: "Master firewalls, IDS/IPS, packet analysis and network hardening techniques.",
-    price: 1499,
-    link: "https://topmate.io/cyberdravida",
-  },
-  {
-    tag: "Bug Bounty",
-    tagColor: "bg-destructive/20 text-destructive",
-    title: "Bug Bounty Hunting for Beginners",
-    desc: "Start earning from bug bounties — learn recon, XSS, IDOR and responsible disclosure.",
-    price: 2499,
-    link: "https://topmate.io/cyberdravida",
-  },
-  {
-    tag: "Malware",
-    tagColor: "bg-secondary/20 text-secondary",
-    title: "Malware Analysis & Reverse Engineering",
-    desc: "Analyze real-world malware samples using static and dynamic analysis techniques.",
-    price: 3499,
-    link: "https://topmate.io/cyberdravida",
-  },
-];
-
-const testimonials = [
-  {
-    quote: "ಈ ಸೆಷನ್ ತುಂಬಾ ಅದ್ಭುತವಾಗಿತ್ತು. ಎಥಿಕಲ್ ಹ್ಯಾಕಿಂಗ್ ವಿಷಯದ ಬಗ್ಗೆ ಸರಳವಾಗಿ ಮತ್ತು ಸ್ಪಷ್ಟವಾಗಿ ಮಾಹಿತಿ ನೀಡಿದರು.",
-    translation: "This session was amazing. The information about ethical hacking was delivered simply and clearly.",
-    author: "Verified Student",
-  },
-  {
-    quote: "ಈ ಕೋರ್ಸ್ ನನ್ನ ಕೆರಿಯರ್ ಅನ್ನು ಬದಲಾಯಿಸಿತು. ಇಲ್ಲಿ ಕಲಿಸಿದ OSINT ತಂತ್ರಗಳು ವಿಶ್ವ ದರ್ಜೆಯವು.",
-    translation: "This course changed my career. The OSINT techniques taught here are world-class.",
-    author: "OSINT Student",
-  },
-  {
-    quote: "ಡಾರ್ಕ್ ವೆಬ್ ಇನ್ವೆಸ್ಟಿಗೇಶನ್ ಬಗ್ಗೆ ಇಷ್ಟು ಸ್ಪಷ್ಟವಾಗಿ ಯಾರೂ ವಿವರಿಸುವುದಿಲ್ಲ. ಹೆಚ್ಚು ಶಿಫಾರಸು ಮಾಡುತ್ತೇನೆ!",
-    translation: "No one explains dark web investigation this clearly. Highly recommended!",
-    author: "Cyber Security Enthusiast",
-  },
-  {
-    quote: "ಕನ್ನಡದಲ್ಲಿ ಸೈಬರ್ ಸೆಕ್ಯುರಿಟಿ ಕಲಿಯಲು ತುಂಬಾ ಸುಲಭವಾಯಿತು. ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳಲು ಬಹಳ ಸಹಾಯಕವಾಯಿತು.",
-    translation: "Learning cybersecurity in Kannada made it so much easier to understand.",
-    author: "College Student",
-  },
-  {
-    quote: "1:1 ಮೆಂಟಾರ್‌ಶಿಪ್ ಸೆಷನ್ ತುಂಬಾ ಉಪಯುಕ್ತವಾಗಿತ್ತು. ಸ್ಪಷ್ಟವಾದ ಕೆರಿಯರ್ ರೋಡ್‌ಮ್ಯಾಪ್ ಸಿಕ್ಕಿತು.",
-    translation: "The 1:1 mentorship session was incredibly useful. Got a clear career roadmap.",
-    author: "Career Mentee",
-  },
-];
-
 const Stars = () => (
   <div className="flex gap-0.5">
     {[...Array(5)].map((_, i) => (
@@ -182,9 +45,7 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
   const count = usePriceCountUp(price, inView);
   const formatted = count.toLocaleString("en-IN");
   return (
-    <span
-      className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${large ? "text-3xl sm:text-4xl" : "text-xl"}`}
-    >
+    <span className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${large ? "text-3xl sm:text-4xl" : "text-xl"}`}>
       ₹{formatted}
     </span>
   );
@@ -196,26 +57,16 @@ const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
       <div className="flex items-center gap-2">
         <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
         {p.popular && <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>}
-        {(p as any).comingSoon && (
-          <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
-        )}
+        {p.comingSoon && <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>}
       </div>
       <h3 className="font-heading font-semibold text-heading text-base">{p.title}</h3>
       <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
       <PriceDisplay price={p.price} inView={inView} />
-      {(p as any).comingSoon ? (
-        <Button
-          variant="outline"
-          className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto"
-          disabled
-        >
-          Coming Soon
-        </Button>
+      {p.comingSoon ? (
+        <Button variant="outline" className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto" disabled>Coming Soon</Button>
       ) : (
         <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10 mt-auto" asChild>
-          <a href={p.link} target="_blank" rel="noopener noreferrer">
-            Get Access <ExternalLink size={14} className="ml-1" />
-          </a>
+          <a href={p.link} target="_blank" rel="noopener noreferrer">Get Access <ExternalLink size={14} className="ml-1" /></a>
         </Button>
       )}
     </CardContent>
@@ -235,19 +86,12 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
     if (!api) return;
     onSlideSelect();
     api.on("select", onSlideSelect);
-    return () => {
-      api.off("select", onSlideSelect);
-    };
+    return () => { api.off("select", onSlideSelect); };
   }, [api, onSlideSelect]);
 
   return (
     <div>
-      <Carousel
-        setApi={setApi}
-        plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]}
-        opts={{ loop: true, align: "center" }}
-        className="w-full"
-      >
+      <Carousel setApi={setApi} plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]} opts={{ loop: true, align: "center" }} className="w-full">
         <CarouselContent className="-ml-3">
           {products.map((p: any) => (
             <CarouselItem key={p.title} className="pl-3 basis-[85%]">
@@ -258,14 +102,7 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
       </Carousel>
       <div className="flex justify-center gap-2 mt-4">
         {products.map((_: any, index: number) => (
-          <button
-            key={index}
-            onClick={() => api?.scrollTo(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              currentSlide === index ? "bg-primary w-6" : "bg-muted-foreground/30"
-            }`}
-            aria-label={`Go to product ${index + 1}`}
-          />
+          <button key={index} onClick={() => api?.scrollTo(index)} className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSlide === index ? "bg-primary w-6" : "bg-muted-foreground/30"}`} aria-label={`Go to product ${index + 1}`} />
         ))}
       </div>
     </div>
@@ -290,34 +127,11 @@ const DesktopProductGrid = ({ products, inView }: { products: any[]; inView: boo
       </div>
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-3 mt-6">
-          <Button
-            variant="outline"
-            size="icon"
-            className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8"
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-          >
-            <ChevronLeft size={16} />
-          </Button>
+          <Button variant="outline" size="icon" className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}><ChevronLeft size={16} /></Button>
           {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setPage(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                page === i ? "bg-primary w-6" : "bg-muted-foreground/30"
-              }`}
-              aria-label={`Page ${i + 1}`}
-            />
+            <button key={i} onClick={() => setPage(i)} className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${page === i ? "bg-primary w-6" : "bg-muted-foreground/30"}`} aria-label={`Page ${i + 1}`} />
           ))}
-          <Button
-            variant="outline"
-            size="icon"
-            className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8"
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            disabled={page === totalPages - 1}
-          >
-            <ChevronRight size={16} />
-          </Button>
+          <Button variant="outline" size="icon" className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8" onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))} disabled={page === totalPages - 1}><ChevronRight size={16} /></Button>
         </div>
       )}
     </div>
@@ -329,6 +143,8 @@ const Courses = () => {
   const inView = useInView(ref, { once: true });
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+  const { data } = useSiteData();
+  const courses = data.courses;
 
   const onSelect = useCallback(() => {
     if (!carouselApi) return;
@@ -339,67 +155,51 @@ const Courses = () => {
     if (!carouselApi) return;
     onSelect();
     carouselApi.on("select", onSelect);
-    return () => {
-      carouselApi.off("select", onSelect);
-    };
+    return () => { carouselApi.off("select", onSelect); };
   }, [carouselApi, onSelect]);
 
   return (
     <section id="courses" className="py-20" ref={ref}>
       <div className="container mx-auto px-4">
-        {/* Heading */}
         <motion.div className="text-center mb-14" {...fadeUp(0)}>
           <h2 className="text-3xl sm:text-4xl font-bold font-heading mb-3 bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
-            Learn With Us
+            {courses.heading}
           </h2>
-          <p className="text-foreground/60 max-w-xl mx-auto">
-            Premium courses, tools, and resources to level up your cybersecurity skills. All products delivered via
-            Topmate.
-          </p>
+          <p className="text-foreground/60 max-w-xl mx-auto">{courses.subheading}</p>
         </motion.div>
 
         {/* Featured Course */}
         <motion.div {...fadeUp(0.1)}>
-          <Card
-            className="bg-card border-border relative overflow-hidden mb-10"
-            style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}
-          >
+          <Card className="bg-card border-border relative overflow-hidden mb-10" style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}>
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary" />
             <CardContent className="p-6 sm:p-8">
               <Badge className="mb-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground border-0">
-                🔥 Most Popular
+                {courses.featured.salesBadge}
               </Badge>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <Badge className="bg-secondary/20 text-secondary border-0">OSINT</Badge>
-                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-heading">
-                    Advanced OSINT Investigation Course (ಕನ್ನಡ)
-                  </h3>
-                  <p className="text-foreground/60 text-sm leading-relaxed">
-                    Master digital forensics, crypto tracking, and the darkweb. A practical roadmap to professional
-                    intelligence — taught entirely in Kannada.
-                  </p>
+                  <Badge className="bg-secondary/20 text-secondary border-0">{courses.featured.categoryTag}</Badge>
+                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-heading">{courses.featured.title}</h3>
+                  <p className="text-foreground/60 text-sm leading-relaxed">{courses.featured.description}</p>
                   <ul className="space-y-2">
-                    {featuredFeatures.map((f) => (
+                    {courses.featured.features.map((f) => (
                       <li key={f} className="flex items-center gap-2 text-sm text-foreground/80">
-                        <Check size={16} className="text-primary shrink-0" />
-                        {f}
+                        <Check size={16} className="text-primary shrink-0" />{f}
                       </li>
                     ))}
                   </ul>
                   <div className="flex items-center gap-4 pt-2">
                     <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
-                      <Users size={14} />
-                      6+ Students Enrolled
+                      <Users size={14} />{courses.featured.enrolledText}
                     </div>
                     <Stars />
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-4">
-                  <PriceDisplay price={5999} inView={inView} large />
+                  <PriceDisplay price={courses.featured.price} inView={inView} large />
                   <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
-                    <a href="https://topmate.io/cyberdravida/1882730" target="_blank" rel="noopener noreferrer">
-                      Enroll Now <ExternalLink size={16} className="ml-1" />
+                    <a href={courses.featured.link} target="_blank" rel="noopener noreferrer">
+                      {courses.featured.ctaText} <ExternalLink size={16} className="ml-1" />
                     </a>
                   </Button>
                   <span className="text-muted-foreground text-xs">Secure payment via Topmate</span>
@@ -409,19 +209,16 @@ const Courses = () => {
           </Card>
         </motion.div>
 
-        {/* Product Grid - Desktop/Tablet with pagination */}
-        <DesktopProductGrid products={products} inView={inView} />
+        <DesktopProductGrid products={courses.products} inView={inView} />
 
-        {/* Product Carousel - Mobile */}
         <div className="sm:hidden mb-12">
-          <ProductCarousel products={products} inView={inView} />
+          <ProductCarousel products={courses.products} inView={inView} />
         </div>
 
-        {/* Bottom CTA */}
         <motion.div className="text-center mb-16" {...fadeUp(0.3)}>
-          <p className="text-foreground/60 mb-4">Explore all courses, tools & mentorship sessions</p>
+          <p className="text-foreground/60 mb-4">{courses.bottomCtaText}</p>
           <Button className="glow-btn px-8 py-5 text-base" asChild>
-            <a href="https://topmate.io/cyberdravida" target="_blank" rel="noopener noreferrer">
+            <a href={courses.bottomCtaLink} target="_blank" rel="noopener noreferrer">
               Visit Our Store <ExternalLink size={16} className="ml-1" />
             </a>
           </Button>
@@ -429,14 +226,9 @@ const Courses = () => {
 
         {/* Testimonials Carousel */}
         <motion.div {...fadeUp(0.35)} className="max-w-2xl mx-auto">
-          <Carousel
-            setApi={setCarouselApi}
-            plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]}
-            opts={{ loop: true }}
-            className="w-full"
-          >
+          <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]} opts={{ loop: true }} className="w-full">
             <CarouselContent>
-              {testimonials.map((t, index) => (
+              {courses.testimonials.map((t, index) => (
                 <CarouselItem key={index}>
                   <Card className="bg-card border-border text-center">
                     <CardContent className="p-8 space-y-4">
@@ -451,17 +243,9 @@ const Courses = () => {
               ))}
             </CarouselContent>
           </Carousel>
-          {/* Dot indicators */}
           <div className="flex justify-center gap-2 mt-4">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => carouselApi?.scrollTo(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  current === index ? "bg-primary w-6" : "bg-muted-foreground/30"
-                }`}
-                aria-label={`Go to testimonial ${index + 1}`}
-              />
+            {courses.testimonials.map((_, index) => (
+              <button key={index} onClick={() => carouselApi?.scrollTo(index)} className={`w-2 h-2 rounded-full transition-all duration-300 ${current === index ? "bg-primary w-6" : "bg-muted-foreground/30"}`} aria-label={`Go to testimonial ${index + 1}`} />
             ))}
           </div>
         </motion.div>
