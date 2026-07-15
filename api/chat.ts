@@ -38,7 +38,7 @@ EVENTS:
 - Past: Cybersecurity Orientation — October 2025, Davangere. Introductory session on cybersecurity careers.
 
 STATS:
-- 500+ students trained
+- 1000+ students trained
 - 10+ events conducted
 - 5+ colleges partnered
 - 1 year active

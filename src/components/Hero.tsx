@@ -134,7 +134,7 @@ const Hero = () => {
           className="flex flex-wrap items-center justify-center gap-3"
           {...fadeUp(0.6)}
         >
-          {["500+ Trained", "Karnataka Based", "Est. 2025"].map((stat) => (
+          {["1000+ Trained", "Karnataka Based", "Est. 2025"].map((stat) => (
             <span
               key={stat}
               className="bg-card/60 border border-border text-foreground/60 text-xs px-4 py-1.5 rounded-full"

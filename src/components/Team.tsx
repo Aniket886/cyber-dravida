@@ -60,7 +60,7 @@ const Team = () => {
                 <p className="text-foreground/60 text-sm leading-relaxed">
                   Aniket is a cybersecurity researcher, ethical hacking mentor, and
                   founder of Cyber Dravida. With experience in OSINT, dark web
-                  investigation, and cyber crime analysis, he has trained 500+
+                  investigation, and cyber crime analysis, he has trained 1000+
                   individuals and is ranked in the top 1% globally on TryHackMe.
                 </p>
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 
 const stats = [
-  { value: 500, suffix: "+", label: "Students Trained" },
+  { value: 1000, suffix: "+", label: "Students Trained" },
   { value: 10, suffix: "+", label: "Events Conducted" },
   { value: 5, suffix: "+", label: "Colleges Reached" },
   { value: 1, suffix: "", label: "Year Active (Est. 2025)" },
