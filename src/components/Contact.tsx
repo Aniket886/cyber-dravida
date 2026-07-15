@@ -194,10 +194,10 @@ const Contact = () => {
             <div className="mt-6 rounded-lg overflow-hidden border border-border">
               <iframe
                 title="Cyber Dravida Location"
-                src="https://www.google.com/maps?q=Davangere%2C%20Karnataka%2C%20India&z=13&output=embed"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=75.9790%2C14.4220%2C76.0100%2C14.4950&layer=mapnik&marker=14.4644%2C75.9218"
                 width="100%"
                 height="180"
-                style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.1)" }}
+                style={{ border: 0, filter: "invert(92%) hue-rotate(180deg) brightness(0.92) contrast(1.05)" }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
