@@ -7,13 +7,14 @@ const navLinks = [
   { label: "Home", href: "#hero" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
+  { label: "OSINT Bot", href: "#osint-bot" },
   { label: "Courses", href: "#courses" },
   { label: "Events", href: "#events" },
   { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
 
-const sectionIds = ["hero", "about", "services", "courses", "stats", "events", "team", "blog", "contact"];
+const sectionIds = ["hero", "about", "services", "osint-bot", "courses", "stats", "events", "team", "blog", "contact"];
 
 const scrollTo = (id: string) => {
   const el = document.getElementById(id);
@@ -127,7 +128,7 @@ const Navbar = () => {
           <span className="font-heading text-lg font-bold text-heading">Cyber Dravida</span>
         </a>
 
-        <div className="hidden md:flex items-center gap-1 relative" ref={navContainerRef}>
+        <div className="hidden lg:flex items-center gap-1 relative" ref={navContainerRef}>
           {/* Liquid glass pill */}
           {glassStyle && (
             <div
@@ -149,7 +150,7 @@ const Navbar = () => {
               href={link.href}
               ref={(el) => setLinkRef(el, link.href.replace("#", ""))}
               onClick={(e) => handleClick(e, link.href)}
-              className={linkClass(link.href) + " px-3 py-1.5"}
+              className={linkClass(link.href) + " px-2.5 py-1.5"}
             >
               {link.label}
             </a>
@@ -157,7 +158,7 @@ const Navbar = () => {
           <Button className="glow-btn ml-4" onClick={() => scrollTo("contact")}>Join Us</Button>
         </div>
 
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon"><Menu className="h-5 w-5" /></Button>
