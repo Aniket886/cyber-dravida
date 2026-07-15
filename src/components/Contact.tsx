@@ -29,7 +29,7 @@ const fadeUp = (delay: number) => ({
 
 const contactInfo = [
   { icon: Mail, label: "Email", value: "cyberdravida@gmail.com", href: "mailto:cyberdravida@gmail.com" },
-  { icon: MapPin, label: "Location", value: "Karnataka, India", href: undefined },
+  { icon: MapPin, label: "Location", value: "Davangere, Karnataka, India", href: undefined },
   { icon: Globe, label: "Website", value: "cyberdravida.in", href: "https://www.cyberdravida.in/" },
 ];
 
@@ -194,7 +194,7 @@ const Contact = () => {
             <div className="mt-6 rounded-lg overflow-hidden border border-border">
               <iframe
                 title="Cyber Dravida Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497511.23481385025!2d74.00600472656247!3d15.350084200000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb1e2e710ab8f%3A0x4ef5ab20ca053e9d!2sKarnataka%2C%20India!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                src="https://www.google.com/maps?q=Davangere%2C%20Karnataka%2C%20India&z=13&output=embed"
                 width="100%"
                 height="180"
                 style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.1)" }}
