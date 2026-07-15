@@ -30,7 +30,7 @@ const fadeUp = (delay: number) => ({
 const contactInfo = [
   { icon: Mail, label: "Email", value: "cyberdravida@gmail.com", href: "mailto:cyberdravida@gmail.com" },
   { icon: MapPin, label: "Location", value: "Davangere, Karnataka, India", href: undefined },
-  { icon: Globe, label: "Website", value: "cyberdravida.in", href: "https://www.cyberdravida.in/" },
+  { icon: Globe, label: "Website", value: "linktr.ee/cyberdravida", href: "http://linktr.ee/cyberdravida" },
 ];
 
 const socials = [
