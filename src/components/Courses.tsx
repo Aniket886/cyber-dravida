@@ -99,7 +99,7 @@ const featuredCourses: FeaturedCourse[] = [
     badge: "New Course",
     badgeClass: "bg-gradient-to-r from-primary to-secondary text-primary-foreground",
     tag: "Ethical Hacking",
-    title: "Ethical Hacking — Beginner to Intermediate",
+    title: "(ಕನ್ನಡ) + (English) Ethical Hacking — Beginner to Intermediate",
     desc: "Build a strong cybersecurity foundation, understand how ethical hackers think, and practise safely in legal training environments.",
     price: 2499,
     link: "https://topmate.io/cyberdravida/2210273",
