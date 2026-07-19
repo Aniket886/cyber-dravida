@@ -281,12 +281,24 @@ const Stars = () => (
   </div>
 );
 
-const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean; large?: boolean }) => {
+const PriceDisplay = ({
+  price,
+  inView,
+  large,
+  promotional,
+}: {
+  price: number;
+  inView: boolean;
+  large?: boolean;
+  promotional?: boolean;
+}) => {
   const count = usePriceCountUp(price, inView);
   const formatted = count.toLocaleString("en-IN");
+  const sizeClass = promotional ? "text-4xl sm:text-5xl" : large ? "text-3xl sm:text-4xl" : "text-xl";
+
   return (
     <span
-      className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${large ? "text-3xl sm:text-4xl" : "text-xl"}`}
+      className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${sizeClass}`}
     >
       ₹{formatted}
     </span>
@@ -341,7 +353,17 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
             )}
           </div>
           <div className="flex flex-col items-center justify-center gap-4">
-            <PriceDisplay price={course.price} inView={inView} large />
+            {course.promotion && promotionActive ? (
+              <div className="flex flex-col items-center text-center">
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Early-Bird Price</span>
+                <PriceDisplay price={course.promotion.price} inView={inView} promotional />
+                <span className="mt-1 text-sm text-muted-foreground">
+                  Regular price <span className="line-through decoration-foreground/60">₹{course.price.toLocaleString("en-IN")}</span>
+                </span>
+              </div>
+            ) : (
+              <PriceDisplay price={course.price} inView={inView} large />
+            )}
             {course.promotion && promotionActive && (
               <div className="w-full max-w-sm rounded-lg border border-secondary/35 bg-secondary/10 px-4 py-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary">
@@ -364,10 +386,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 font-heading text-lg font-bold text-secondary">
-                  Early bird ₹{course.promotion.price.toLocaleString("en-IN")}
-                </p>
-                <p className="mt-1 text-xs text-foreground/65">
+                <p className="mt-3 text-xs text-foreground/65">
                   Use code <span className="font-mono font-semibold text-heading">{course.promotion.code}</span> · {course.promotion.note}
                 </p>
                 <p className="mt-1.5 text-[10px] text-foreground/40">Ends 31 Jul 2026, 11:59 PM IST</p>
