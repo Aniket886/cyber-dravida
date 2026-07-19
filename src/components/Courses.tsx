@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { getCountdown } from "@/lib/countdown";
+import { getEnrollmentLink } from "@/lib/courseOffer";
 import Autoplay from "embla-carousel-autoplay";
 
 const fadeUp = (delay: number) => ({
@@ -77,6 +78,7 @@ interface FeaturedCourse {
     code: string;
     note: string;
     endsAt: string;
+    link: string;
   };
   disclaimer?: string;
 }
@@ -115,6 +117,7 @@ const featuredCourses: FeaturedCourse[] = [
       code: "EB10",
       note: "Limited to 10 redemptions",
       endsAt: "2026-07-31T23:59:59+05:30",
+      link: "https://topmate.io/cyberdravida/2210273?coupon_code=EB10",
     },
     disclaimer:
       "For educational and authorized security testing only. Never test any website, network, account or system without explicit written permission.",
@@ -294,6 +297,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
   const MetaIcon = course.metaIcon;
   const countdown = useCountdown(course.promotion?.endsAt);
   const promotionActive = Boolean(course.promotion && !countdown.isExpired);
+  const enrollmentLink = getEnrollmentLink(course.link, course.promotion?.link, promotionActive);
   const countdownUnits = [
     { label: "Days", value: countdown.days },
     { label: "Hours", value: countdown.hours },
@@ -376,7 +380,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
               </div>
             )}
             <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
-              <a href={course.link} target="_blank" rel="noopener noreferrer">
+              <a href={enrollmentLink} target="_blank" rel="noopener noreferrer">
                 {promotionActive ? "Claim Early-Bird Access" : "Enroll Now"}
                 <ExternalLink size={16} className="ml-1" />
               </a>
