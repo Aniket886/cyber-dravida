@@ -25,7 +25,8 @@ SERVICES (each has a detailed subpage on the website):
 4. OSINT & Investigation — Open Source Intelligence techniques for digital investigations and information gathering. Learn more: https://cyberdravida.in/services/osint-investigation
 
 COURSES & DIGITAL PRODUCTS (all available on Topmate):
-- ⭐ FEATURED: Advanced OSINT Investigation Course — ₹4,999. Comprehensive OSINT training with real-world case studies. Enroll: https://topmate.io/cyberdravida/1411837
+- NEW: Ethical Hacking — Beginner to Intermediate — ₹2,499. Includes 20–25 hours of recorded learning, Kannada and English explanations, practical lab guidance, assignments, a final project, and a completion certificate. Limited early-bird price: ₹1,999 with code EB10. Enroll: https://topmate.io/cyberdravida/2210273
+- BEST SELLER: Advanced OSINT Investigation Course (ಕನ್ನಡ) — ₹5,999. Practical OSINT, digital forensics, crypto tracking, Dark Web research, and professional OpSec in Kannada. Enroll: https://topmate.io/cyberdravida/1882730
 - Android Hacking 101 — ₹2,999. Learn mobile security testing and Android exploitation techniques. Enroll: https://topmate.io/cyberdravida
 - Professional Credential Recovery Tool — ₹999. Digital tool for recovering credentials professionally. Get access: https://topmate.io/cyberdravida
 - Data Recovery from HDD/SSD/Pendrive — ₹699. Step-by-step guide for recovering data from storage devices. Get access: https://topmate.io/cyberdravida
@@ -84,6 +85,21 @@ function stripHtml(text: string): string {
   return text.replace(/<[^>]*>/g, "");
 }
 
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+function isChatMessage(value: unknown): value is ChatMessage {
+  if (!value || typeof value !== "object") return false;
+
+  const message = value as Record<string, unknown>;
+  return (
+    (message.role === "user" || message.role === "assistant") &&
+    typeof message.content === "string"
+  );
+}
+
 function getCorsHeaders(origin: string | undefined) {
   const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
@@ -130,17 +146,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Sanitize messages
-  const sanitizedMessages = messages
-    .filter(
-      (m: any) =>
-        m &&
-        typeof m.role === "string" &&
-        typeof m.content === "string" &&
-        ["user", "assistant"].includes(m.role)
-    )
-    .map((m: any) => ({
-      role: m.role,
-      content: stripHtml(m.content).slice(0, 500),
+  const sanitizedMessages = (messages as unknown[])
+    .filter(isChatMessage)
+    .map((message) => ({
+      role: message.role,
+      content: stripHtml(message.content).slice(0, 500),
     }));
 
   if (sanitizedMessages.length === 0) {

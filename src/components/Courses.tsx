@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
-import { Check, Star, Users, Quote, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  BookOpen,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Quote,
+  ShieldCheck,
+  Star,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,15 +43,85 @@ function usePriceCountUp(target: number, inView: boolean) {
   return count;
 }
 
-const featuredFeatures = [
-  "Clear Web & Darkweb mastery",
-  "Real-world investigative skills",
-  "Crypto transaction tracking",
-  "Professional OpSec techniques",
-  "Pre-recorded — learn at your own pace",
+interface FeaturedCourse {
+  badge: string;
+  badgeClass: string;
+  tag: string;
+  title: string;
+  desc: string;
+  price: number;
+  link: string;
+  features: string[];
+  meta: string;
+  metaIcon: LucideIcon;
+  showRating?: boolean;
+  promotion?: {
+    price: number;
+    code: string;
+    note: string;
+  };
+  disclaimer?: string;
+}
+
+interface Product {
+  tag: string;
+  tagColor: string;
+  title: string;
+  desc: string;
+  price: number;
+  link: string;
+  popular?: boolean;
+  comingSoon?: boolean;
+}
+
+const featuredCourses: FeaturedCourse[] = [
+  {
+    badge: "New Course",
+    badgeClass: "bg-gradient-to-r from-primary to-secondary text-primary-foreground",
+    tag: "Ethical Hacking",
+    title: "Ethical Hacking — Beginner to Intermediate",
+    desc: "Build a strong cybersecurity foundation, understand how ethical hackers think, and practise safely in legal training environments.",
+    price: 2499,
+    link: "https://topmate.io/cyberdravida/2210273",
+    features: [
+      "Networking, Linux, Kali Linux, OSINT, scanning, web security and reporting",
+      "20–25 hours across 8 core modules plus a reporting and career module",
+      "Beginner-friendly Kannada and English explanations",
+      "Notes, worksheets, command references, quizzes and assignments",
+      "Legal practical labs, a final project and completion certificate",
+    ],
+    meta: "Beginner–Intermediate · 20–25 hours",
+    metaIcon: BookOpen,
+    promotion: {
+      price: 1999,
+      code: "EB10",
+      note: "Limited to 10 redemptions",
+    },
+    disclaimer:
+      "For educational and authorized security testing only. Never test any website, network, account or system without explicit written permission.",
+  },
+  {
+    badge: "Best Seller",
+    badgeClass: "bg-gradient-to-r from-primary to-secondary text-primary-foreground",
+    tag: "OSINT",
+    title: "Advanced OSINT Investigation Course (ಕನ್ನಡ)",
+    desc: "Master digital forensics, crypto tracking, and the dark web through a practical roadmap to professional intelligence, taught entirely in Kannada.",
+    price: 5999,
+    link: "https://topmate.io/cyberdravida/1882730",
+    features: [
+      "Clear Web and Dark Web mastery",
+      "Real-world investigative skills",
+      "Crypto transaction tracking",
+      "Professional OpSec techniques",
+      "Pre-recorded — learn at your own pace",
+    ],
+    meta: "50+ Students Enrolled",
+    metaIcon: Users,
+    showRating: true,
+  },
 ];
 
-const products = [
+const products: Product[] = [
   {
     tag: "Hacking",
     tagColor: "bg-primary/20 text-primary",
@@ -190,20 +271,83 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
   );
 };
 
-const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
+const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView: boolean }) => {
+  const MetaIcon = course.metaIcon;
+
+  return (
+    <Card
+      className="bg-card border-border relative overflow-hidden"
+      style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}
+    >
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary" />
+      <CardContent className="p-6 sm:p-8">
+        <Badge className={`mb-4 border-0 ${course.badgeClass}`}>{course.badge}</Badge>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <Badge className="bg-secondary/20 text-secondary border-0">{course.tag}</Badge>
+            <h3 className="text-xl sm:text-2xl font-bold font-heading text-heading">{course.title}</h3>
+            <p className="text-foreground/60 text-sm leading-relaxed">{course.desc}</p>
+            <ul className="space-y-2">
+              {course.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2 text-sm text-foreground/80">
+                  <Check size={16} className="text-primary shrink-0 mt-0.5" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+                <MetaIcon size={14} />
+                {course.meta}
+              </div>
+              {course.showRating && <Stars />}
+            </div>
+            {course.disclaimer && (
+              <div className="flex items-start gap-2 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+                <ShieldCheck size={15} className="mt-0.5 shrink-0 text-secondary" />
+                <span>{course.disclaimer}</span>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <PriceDisplay price={course.price} inView={inView} large />
+            {course.promotion && (
+              <div className="w-full max-w-xs rounded-lg border border-secondary/30 bg-secondary/10 px-4 py-3 text-center">
+                <p className="font-heading text-lg font-bold text-secondary">
+                  Early bird ₹{course.promotion.price.toLocaleString("en-IN")}
+                </p>
+                <p className="mt-1 text-xs text-foreground/65">
+                  Use code <span className="font-mono font-semibold text-heading">{course.promotion.code}</span> · {course.promotion.note}
+                </p>
+              </div>
+            )}
+            <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
+              <a href={course.link} target="_blank" rel="noopener noreferrer">
+                Enroll Now <ExternalLink size={16} className="ml-1" />
+              </a>
+            </Button>
+            <span className="text-muted-foreground text-xs">Secure payment via Topmate</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+const ProductCard = ({ p, inView }: { p: Product; inView: boolean }) => (
   <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full flex flex-col">
     <CardContent className="p-6 flex flex-col flex-1 gap-3">
       <div className="flex items-center gap-2">
         <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
         {p.popular && <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>}
-        {(p as any).comingSoon && (
+        {p.comingSoon && (
           <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
         )}
       </div>
       <h3 className="font-heading font-semibold text-heading text-base">{p.title}</h3>
       <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
       <PriceDisplay price={p.price} inView={inView} />
-      {(p as any).comingSoon ? (
+      {p.comingSoon ? (
         <Button
           variant="outline"
           className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto"
@@ -222,7 +366,7 @@ const ProductCard = ({ p, inView }: { p: any; inView: boolean }) => (
   </Card>
 );
 
-const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolean }) => {
+const ProductCarousel = ({ products, inView }: { products: Product[]; inView: boolean }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -249,7 +393,7 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
         className="w-full"
       >
         <CarouselContent className="-ml-3">
-          {products.map((p: any) => (
+          {products.map((p) => (
             <CarouselItem key={p.title} className="pl-3 basis-[85%]">
               <ProductCard p={p} inView={inView} />
             </CarouselItem>
@@ -257,7 +401,7 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
         </CarouselContent>
       </Carousel>
       <div className="flex justify-center gap-2 mt-4">
-        {products.map((_: any, index: number) => (
+        {products.map((_, index) => (
           <button
             key={index}
             onClick={() => api?.scrollTo(index)}
@@ -274,7 +418,7 @@ const ProductCarousel = ({ products, inView }: { products: any[]; inView: boolea
 
 const ITEMS_PER_PAGE = 6;
 
-const DesktopProductGrid = ({ products, inView }: { products: any[]; inView: boolean }) => {
+const DesktopProductGrid = ({ products, inView }: { products: Product[]; inView: boolean }) => {
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const paged = useMemo(() => products.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE), [products, page]);
@@ -358,56 +502,14 @@ const Courses = () => {
           </p>
         </motion.div>
 
-        {/* Featured Course */}
-        <motion.div {...fadeUp(0.1)}>
-          <Card
-            className="bg-card border-border relative overflow-hidden mb-10"
-            style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}
-          >
-            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary" />
-            <CardContent className="p-6 sm:p-8">
-              <Badge className="mb-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground border-0">
-                🔥 Most Popular
-              </Badge>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <Badge className="bg-secondary/20 text-secondary border-0">OSINT</Badge>
-                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-heading">
-                    Advanced OSINT Investigation Course (ಕನ್ನಡ)
-                  </h3>
-                  <p className="text-foreground/60 text-sm leading-relaxed">
-                    Master digital forensics, crypto tracking, and the darkweb. A practical roadmap to professional
-                    intelligence — taught entirely in Kannada.
-                  </p>
-                  <ul className="space-y-2">
-                    {featuredFeatures.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-sm text-foreground/80">
-                        <Check size={16} className="text-primary shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex items-center gap-4 pt-2">
-                    <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
-                      <Users size={14} />
-                      50+ Students Enrolled
-                    </div>
-                    <Stars />
-                  </div>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-4">
-                  <PriceDisplay price={5999} inView={inView} large />
-                  <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
-                    <a href="https://topmate.io/cyberdravida/1882730" target="_blank" rel="noopener noreferrer">
-                      Enroll Now <ExternalLink size={16} className="ml-1" />
-                    </a>
-                  </Button>
-                  <span className="text-muted-foreground text-xs">Secure payment via Topmate</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+        {/* Featured Courses */}
+        <div className="space-y-8 mb-10">
+          {featuredCourses.map((course, index) => (
+            <motion.div key={course.title} {...fadeUp(0.1 + index * 0.08)}>
+              <FeaturedCourseCard course={course} inView={inView} />
+            </motion.div>
+          ))}
+        </div>
 
         {/* Product Grid - Desktop/Tablet with pagination */}
         <DesktopProductGrid products={products} inView={inView} />
