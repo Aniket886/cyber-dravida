@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { getCountdown } from "@/lib/countdown";
 import Autoplay from "embla-carousel-autoplay";
 
 const fadeUp = (delay: number) => ({
@@ -43,6 +44,22 @@ function usePriceCountUp(target: number, inView: boolean) {
   return count;
 }
 
+function useCountdown(endsAt?: string) {
+  const [countdown, setCountdown] = useState(() => getCountdown(endsAt ?? ""));
+
+  useEffect(() => {
+    if (!endsAt) return;
+
+    const updateCountdown = () => setCountdown(getCountdown(endsAt));
+    updateCountdown();
+    const intervalId = window.setInterval(updateCountdown, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [endsAt]);
+
+  return countdown;
+}
+
 interface FeaturedCourse {
   badge: string;
   badgeClass: string;
@@ -59,6 +76,7 @@ interface FeaturedCourse {
     price: number;
     code: string;
     note: string;
+    endsAt: string;
   };
   disclaimer?: string;
 }
@@ -96,6 +114,7 @@ const featuredCourses: FeaturedCourse[] = [
       price: 1999,
       code: "EB10",
       note: "Limited to 10 redemptions",
+      endsAt: "2026-07-31T23:59:59+05:30",
     },
     disclaimer:
       "For educational and authorized security testing only. Never test any website, network, account or system without explicit written permission.",
@@ -273,6 +292,14 @@ const PriceDisplay = ({ price, inView, large }: { price: number; inView: boolean
 
 const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView: boolean }) => {
   const MetaIcon = course.metaIcon;
+  const countdown = useCountdown(course.promotion?.endsAt);
+  const promotionActive = Boolean(course.promotion && !countdown.isExpired);
+  const countdownUnits = [
+    { label: "Days", value: countdown.days },
+    { label: "Hours", value: countdown.hours },
+    { label: "Minutes", value: countdown.minutes },
+    { label: "Seconds", value: countdown.seconds },
+  ];
 
   return (
     <Card
@@ -311,19 +338,47 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
           </div>
           <div className="flex flex-col items-center justify-center gap-4">
             <PriceDisplay price={course.price} inView={inView} large />
-            {course.promotion && (
-              <div className="w-full max-w-xs rounded-lg border border-secondary/30 bg-secondary/10 px-4 py-3 text-center">
-                <p className="font-heading text-lg font-bold text-secondary">
+            {course.promotion && promotionActive && (
+              <div className="w-full max-w-sm rounded-lg border border-secondary/35 bg-secondary/10 px-4 py-4 text-center">
+                <div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary">
+                  <span className="h-2 w-2 rounded-full bg-secondary motion-safe:animate-pulse" />
+                  Early-bird offer ends in
+                </div>
+                <div
+                  className="mt-3 grid grid-cols-4 gap-1.5"
+                  role="timer"
+                  aria-label={`${countdown.days} days, ${countdown.hours} hours, ${countdown.minutes} minutes and ${countdown.seconds} seconds remaining`}
+                >
+                  {countdownUnits.map((unit) => (
+                    <div key={unit.label} className="rounded-md bg-background/55 px-1 py-2">
+                      <span className="block font-mono text-lg font-bold tabular-nums text-heading sm:text-xl">
+                        {String(unit.value).padStart(2, "0")}
+                      </span>
+                      <span className="mt-0.5 block text-[9px] uppercase tracking-wide text-foreground/45">
+                        {unit.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 font-heading text-lg font-bold text-secondary">
                   Early bird ₹{course.promotion.price.toLocaleString("en-IN")}
                 </p>
                 <p className="mt-1 text-xs text-foreground/65">
                   Use code <span className="font-mono font-semibold text-heading">{course.promotion.code}</span> · {course.promotion.note}
                 </p>
+                <p className="mt-1.5 text-[10px] text-foreground/40">Ends 31 Jul 2026, 11:59 PM IST</p>
+              </div>
+            )}
+            {course.promotion && !promotionActive && (
+              <div className="w-full max-w-xs rounded-lg border border-border bg-muted/35 px-4 py-3 text-center">
+                <p className="font-heading text-sm font-semibold text-heading">Early-bird offer ended</p>
+                <p className="mt-1 text-xs text-foreground/50">Standard course enrollment remains available.</p>
               </div>
             )}
             <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
               <a href={course.link} target="_blank" rel="noopener noreferrer">
-                Enroll Now <ExternalLink size={16} className="ml-1" />
+                {promotionActive ? "Claim Early-Bird Access" : "Enroll Now"}
+                <ExternalLink size={16} className="ml-1" />
               </a>
             </Button>
             <span className="text-muted-foreground text-xs">Secure payment via Topmate</span>
