@@ -101,7 +101,7 @@ const featuredCourses: FeaturedCourse[] = [
     tag: "Ethical Hacking",
     title: "Ethical Hacking — Beginner to Intermediate (ಕನ್ನಡ) + (English)",
     desc: "Build a strong cybersecurity foundation, understand how ethical hackers think, and practise safely in legal training environments.",
-    price: 2499,
+    price: 4999,
     link: "https://topmate.io/cyberdravida/2210273",
     features: [
       "Networking, Linux, Kali Linux, OSINT, scanning, web security and reporting",
