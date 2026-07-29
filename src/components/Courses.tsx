@@ -386,8 +386,12 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 text-xs text-foreground/65">
-                  Use code <span className="font-mono font-semibold text-heading">{course.promotion.code}</span> · {course.promotion.note}
+                <p className="mt-3 text-sm font-medium text-foreground/75">
+                  Use code{" "}
+                  <span className="inline-flex rounded-md border border-yellow-400/35 bg-yellow-400/10 px-1.5 py-0.5 font-mono font-bold text-yellow-300 motion-safe:animate-pulse">
+                    {course.promotion.code}
+                  </span>{" "}
+                  · {course.promotion.note}
                 </p>
                 <p className="mt-1.5 text-[10px] text-foreground/40">Ends 31 Aug 2026, 11:59 PM IST</p>
               </div>
