@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getCountdown } from "@/lib/countdown";
 
-const DEADLINE = "2026-07-31T23:59:59+05:30";
+const DEADLINE = "2026-08-31T23:59:59+05:30";
 const deadlineMs = Date.parse(DEADLINE);
 
 describe("getCountdown", () => {

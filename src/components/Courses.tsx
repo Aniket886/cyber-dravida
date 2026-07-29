@@ -116,7 +116,7 @@ const featuredCourses: FeaturedCourse[] = [
       price: 1999,
       code: "EB10",
       note: "Limited to 10 redemptions",
-      endsAt: "2026-07-31T23:59:59+05:30",
+      endsAt: "2026-08-31T23:59:59+05:30",
       link: "https://topmate.io/cyberdravida/2210273?coupon_code=EB10",
     },
     disclaimer:
@@ -389,7 +389,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
                 <p className="mt-3 text-xs text-foreground/65">
                   Use code <span className="font-mono font-semibold text-heading">{course.promotion.code}</span> · {course.promotion.note}
                 </p>
-                <p className="mt-1.5 text-[10px] text-foreground/40">Ends 31 Jul 2026, 11:59 PM IST</p>
+                <p className="mt-1.5 text-[10px] text-foreground/40">Ends 31 Aug 2026, 11:59 PM IST</p>
               </div>
             )}
             {course.promotion && !promotionActive && (
