@@ -12,7 +12,7 @@ ABOUT CYBER DRAVIDA:
 - Contact: cyberdravida@gmail.com
 
 FOUNDER & TEAM:
-- Aniket Tegginamath — Founder & Lead Researcher.
+- Aniket Tegginamath — Founder & Lead Instructor.
 - Credentials: CEH (Certified Ethical Hacker), OSINT Researcher, TryHackMe Top 1%, CCI, Ethical Hacking Mentor.
 - LinkedIn: https://linkedin.com/in/aniket-tegginamath
 - TryHackMe: https://tryhackme.com/p/D4rkMatrix

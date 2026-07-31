@@ -88,7 +88,7 @@ const Team = () => {
               <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <Badge className="border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
-                    Founder &amp; Lead Researcher
+                    Founder &amp; Lead Instructor
                   </Badge>
                   <h3 className="mt-4 font-heading text-3xl font-bold leading-tight text-heading sm:text-4xl">
                     Aniket Tegginamath
