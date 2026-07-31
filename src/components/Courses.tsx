@@ -2,13 +2,22 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   BookOpen,
+  Bot,
+  Bug,
+  DatabaseBackup,
+  Fingerprint,
   Check,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  LockKeyhole,
+  MessageCircle,
+  Network,
   Quote,
   ShieldCheck,
+  Smartphone,
   Star,
+  SquareTerminal,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -246,6 +255,19 @@ const products: Product[] = [
   },
 ];
 
+const productIcons: Record<string, LucideIcon> = {
+  Hacking: Smartphone,
+  Recovery: DatabaseBackup,
+  Security: ShieldCheck,
+  Mentorship: MessageCircle,
+  Automation: Bot,
+  Antivirus: LockKeyhole,
+  Forensics: Fingerprint,
+  Networking: Network,
+  "Bug Bounty": Bug,
+  Malware: SquareTerminal,
+};
+
 const testimonials = [
   {
     quote: "ಈ ಸೆಷನ್ ತುಂಬಾ ಅದ್ಭುತವಾಗಿತ್ತು. ಎಥಿಕಲ್ ಹ್ಯಾಕಿಂಗ್ ವಿಷಯದ ಬಗ್ಗೆ ಸರಳವಾಗಿ ಮತ್ತು ಸ್ಪಷ್ಟವಾಗಿ ಮಾಹಿತಿ ನೀಡಿದರು.",
@@ -320,21 +342,27 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
 
   return (
     <Card
-      className="bg-card border-border relative overflow-hidden"
-      style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.15)" }}
+      className="group relative overflow-hidden border-white/[0.08] bg-card/70 shadow-[0_20px_60px_hsl(var(--background)/0.45)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_26px_80px_hsl(var(--background)/0.65),0_0_35px_hsl(var(--primary)/0.1)]"
     >
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-primary to-secondary" />
-      <CardContent className="p-6 sm:p-8">
-        <Badge className={`mb-4 border-0 ${course.badgeClass}`}>{course.badge}</Badge>
-        <div className="grid md:grid-cols-2 gap-8">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
+      <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl transition-colors duration-500 group-hover:bg-secondary/10" />
+      <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-gradient-to-b from-primary via-secondary to-transparent" />
+      <CardContent className="relative p-6 sm:p-8">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <Badge className={`border-0 ${course.badgeClass}`}>{course.badge}</Badge>
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/25">Cyber Dravida Academy</span>
+        </div>
+        <div className="grid gap-8 md:grid-cols-[1.08fr_0.92fr] lg:gap-12">
           <div className="space-y-4">
             <Badge className="bg-secondary/20 text-secondary border-0">{course.tag}</Badge>
-            <h3 className="text-xl sm:text-2xl font-bold font-heading text-heading">{course.title}</h3>
+            <h3 className="font-heading text-xl font-bold leading-tight text-heading sm:text-2xl">{course.title}</h3>
             <p className="text-foreground/60 text-sm leading-relaxed">{course.desc}</p>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5 border-y border-white/[0.06] py-4">
               {course.features.map((feature) => (
                 <li key={feature} className="flex items-start gap-2 text-sm text-foreground/80">
-                  <Check size={16} className="text-primary shrink-0 mt-0.5" />
+                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <Check size={11} className="text-primary" />
+                  </span>
                   {feature}
                 </li>
               ))}
@@ -353,7 +381,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
               </div>
             )}
           </div>
-          <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.07] bg-background/35 p-5 shadow-inner backdrop-blur-sm sm:p-6">
             {course.promotion && promotionActive ? (
               <div className="flex flex-col items-center text-center">
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Early-Bird Price</span>
@@ -417,37 +445,62 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
   );
 };
 
-const ProductCard = ({ p, inView }: { p: Product; inView: boolean }) => (
-  <Card className="bg-card border-border hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300 h-full flex flex-col">
-    <CardContent className="p-6 flex flex-col flex-1 gap-3">
-      <div className="flex items-center gap-2">
-        <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
-        {p.popular && <Badge className="bg-secondary/20 text-secondary border-0 text-[10px]">Popular</Badge>}
-        {p.comingSoon && (
-          <Badge className="bg-yellow-500/20 text-yellow-400 border-0 text-[10px]">Coming Soon</Badge>
-        )}
-      </div>
-      <h3 className="font-heading font-semibold text-heading text-base">{p.title}</h3>
-      <p className="text-foreground/60 text-sm leading-relaxed flex-1">{p.desc}</p>
-      <PriceDisplay price={p.price} inView={inView} />
-      {p.comingSoon ? (
-        <Button
-          variant="outline"
-          className="w-full border-muted-foreground/30 text-muted-foreground cursor-not-allowed mt-auto"
-          disabled
-        >
-          Coming Soon
-        </Button>
-      ) : (
-        <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10 mt-auto" asChild>
-          <a href={p.link} target="_blank" rel="noopener noreferrer">
-            Get Access <ExternalLink size={14} className="ml-1" />
-          </a>
-        </Button>
-      )}
-    </CardContent>
-  </Card>
-);
+const ProductCard = ({ p, inView }: { p: Product; inView: boolean }) => {
+  const ProductIcon = productIcons[p.tag] ?? BookOpen;
+
+  return (
+    <Card className="group relative flex h-full flex-col overflow-hidden border-white/[0.08] bg-card/65 shadow-[0_16px_45px_hsl(var(--background)/0.35)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/35 hover:shadow-[0_24px_65px_hsl(var(--background)/0.55),0_0_28px_hsl(var(--primary)/0.09)]">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-secondary/50" />
+      <div className="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-primary/[0.07] blur-2xl transition-colors duration-500 group-hover:bg-secondary/10" />
+      <CardContent className="relative flex flex-1 flex-col p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge className={`${p.tagColor} border-0`}>{p.tag}</Badge>
+            {p.popular && <Badge className="border-0 bg-secondary/15 text-[10px] text-secondary">Popular</Badge>}
+            {p.comingSoon && (
+              <Badge className="border-0 bg-yellow-500/15 text-[10px] text-yellow-300">Coming Soon</Badge>
+            )}
+          </div>
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/[0.08] text-primary transition-all duration-500 group-hover:border-secondary/30 group-hover:bg-secondary/10 group-hover:text-secondary">
+            <ProductIcon className="h-5 w-5" aria-hidden="true" />
+          </div>
+        </div>
+
+        <div className="mt-6 flex flex-1 flex-col">
+          <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/25">Cyber Dravida Resource</p>
+          <h3 className="mt-2 font-heading text-lg font-semibold leading-snug text-heading">{p.title}</h3>
+          <p className="mt-3 flex-1 text-sm leading-relaxed text-foreground/55">{p.desc}</p>
+        </div>
+
+        <div className="mt-6 border-t border-white/[0.07] pt-5">
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <PriceDisplay price={p.price} inView={inView} />
+            <span className="font-mono text-[9px] uppercase tracking-wider text-foreground/25">One-time access</span>
+          </div>
+          {p.comingSoon ? (
+            <Button
+              variant="outline"
+              className="mt-auto w-full cursor-not-allowed border-muted-foreground/20 bg-background/25 text-muted-foreground"
+              disabled
+            >
+              Coming Soon
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              className="mt-auto w-full border-primary/25 bg-background/25 text-primary transition-all duration-300 hover:border-primary/45 hover:bg-primary/10"
+              asChild
+            >
+              <a href={p.link} target="_blank" rel="noopener noreferrer">
+                Get Access <ExternalLink size={14} className="ml-1" />
+              </a>
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const ProductCarousel = ({ products, inView }: { products: Product[]; inView: boolean }) => {
   const [api, setApi] = useState<CarouselApi>();

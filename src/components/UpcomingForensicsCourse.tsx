@@ -36,7 +36,7 @@ const requirements = [
 ];
 
 const disclaimer = [
-  "This internship is strictly for educational and research purposes only.",
+  "This course is strictly for educational and research purposes only.",
   "All tools and techniques taught during the program are intended to be used ethically and legally for investigation, security testing, and academic study.",
   "Cyber Octopus Pvt. Ltd. and its trainers are not responsible for any misuse of the tools or knowledge shared during the program.",
 ];
@@ -55,18 +55,10 @@ const UpcomingForensicsCourse = () => {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: reduceMotion ? 0 : 0.55, ease: "easeOut" }}
           whileHover={reduceMotion ? undefined : { y: -4 }}
-          aria-label="View details for Cyber Forensics Investigation five-week internship program"
+          aria-label="View details for Cyber Forensics Investigation five-week course"
         >
           <div className="relative overflow-hidden rounded-[calc(1.4rem-1px)] bg-card/95 px-6 py-7 sm:px-8 sm:py-9">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_44%,hsl(var(--secondary)/0.16),transparent_30%),linear-gradient(110deg,transparent_15%,hsl(var(--primary)/0.05)_55%,transparent_80%)]" />
-            {!reduceMotion && (
-              <motion.div
-                className="pointer-events-none absolute bottom-0 top-0 w-px bg-gradient-to-b from-transparent via-secondary/70 to-transparent shadow-[0_0_18px_hsl(var(--secondary)/0.5)]"
-                animate={{ left: ["-2%", "102%"] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear", repeatDelay: 1.5 }}
-              />
-            )}
-
             <div className="relative grid items-center gap-8 lg:grid-cols-[1fr_19rem]">
               <div>
                 <div className="mb-5 flex flex-wrap items-center gap-2">
@@ -78,13 +70,13 @@ const UpcomingForensicsCourse = () => {
                 </div>
 
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-foreground/40">
-                  Live forensic internship
+                  Live forensic course
                 </p>
                 <h3 className="mt-3 max-w-3xl font-heading text-2xl font-bold leading-tight text-heading sm:text-3xl">
-                  Cyber Forensics Investigation - Five-Week Internship Program
+                  Cyber Forensics Investigation - Five-Week Live Course
                 </h3>
                 <p className="mt-4 max-w-3xl text-sm leading-relaxed text-foreground/60 sm:text-base">
-                  Participate in a hands-on exploration of cyber crime investigation and digital forensics through a comprehensive five-week live internship program offered by Cyber Dravida.
+                  Participate in a hands-on exploration of cyber crime investigation and digital forensics through a comprehensive five-week live course offered by Cyber Dravida.
                 </p>
 
                 <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-5 text-xs text-foreground/55 sm:text-sm">
@@ -137,7 +129,7 @@ const UpcomingForensicsCourse = () => {
           <DialogHeader className="pr-8">
             <div className="mb-5 flex flex-wrap items-center gap-2">
               <Badge className="border-0 bg-secondary/15 text-secondary">Upcoming 2027</Badge>
-              <Badge className="border border-white/10 bg-white/5 text-foreground/65">Five-Week Live Internship</Badge>
+              <Badge className="border border-white/10 bg-white/5 text-foreground/65">Five-Week Live Course</Badge>
             </div>
             <DialogTitle className="font-heading text-2xl font-bold leading-tight text-heading sm:text-3xl lg:text-4xl">
               Cyber Forensics Investigation
