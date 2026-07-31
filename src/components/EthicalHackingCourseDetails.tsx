@@ -27,7 +27,7 @@ interface EthicalHackingCourseDetailsProps {
 }
 
 const courseFacts = [
-  { label: "Recorded content", value: "20-25 hours", icon: Clock3 },
+  { label: "Recorded content", value: "50+ hours", icon: Clock3 },
   { label: "Curriculum", value: "8 core + 1 bonus", icon: BookOpen },
   { label: "Learning mode", value: "Self-paced", icon: PlayCircle },
   { label: "Practical focus", value: "65% hands-on", icon: FlaskConical },

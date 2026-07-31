@@ -117,12 +117,12 @@ const featuredCourses: FeaturedCourse[] = [
     link: "https://topmate.io/cyberdravida/2210273",
     features: [
       "Networking, Linux, Kali Linux, OSINT, scanning, web security and reporting",
-      "20–25 hours across 8 core modules plus a reporting and career module",
+      "50+ hours across 8 core modules plus a reporting and career module",
       "Beginner-friendly Kannada and English explanations",
       "Notes, worksheets, command references, quizzes and assignments",
       "Legal practical labs, a final project and completion certificate",
     ],
-    meta: "Beginner–Intermediate · 20–25 hours",
+    meta: "Beginner–Intermediate · 50+ hours",
     metaIcon: BookOpen,
     promotion: {
       price: 1999,
