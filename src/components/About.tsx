@@ -56,24 +56,24 @@ const About = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="about" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="about" className="relative overflow-hidden py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(148,163,184,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.45)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute -left-24 top-16 h-80 w-80 rounded-full bg-red-500/[0.045] blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-10 h-96 w-96 rounded-full bg-cyan-500/[0.05] blur-3xl" />
 
       <div className="container relative mx-auto px-4">
         <motion.div
-          className="mx-auto mb-14 max-w-3xl text-center sm:mb-16"
+          className="mx-auto mb-9 max-w-3xl text-center sm:mb-10"
           initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: reduceMotion ? 0 : 0.5, ease: "easeOut" }}
         >
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-secondary">Who We Are</p>
-          <h2 className="mt-4 bg-gradient-to-r from-red-300 via-heading to-cyan-300 bg-clip-text font-heading text-3xl font-bold text-transparent sm:text-4xl lg:text-5xl">
+          <h2 className="mt-3 bg-gradient-to-r from-red-300 via-heading to-cyan-300 bg-clip-text font-heading text-3xl font-bold text-transparent sm:text-4xl">
             About Cyber Dravida
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-foreground/55 sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-foreground/55 sm:text-base">
             A Karnataka-born cybersecurity organization making practical security knowledge accessible beyond major technology hubs.
           </p>
         </motion.div>
@@ -91,7 +91,7 @@ const About = () => {
           <div className="absolute inset-0 opacity-[0.025] [background-image:linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:30px_30px]" />
 
           <div className="relative grid lg:grid-cols-[1.08fr_0.92fr]">
-            <div className="border-b border-white/[0.08] p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10 xl:p-12">
+            <div className="border-b border-white/[0.08] p-6 sm:p-7 lg:border-b-0 lg:border-r lg:p-8 xl:p-9">
               <div className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/[0.08] text-red-300">
                   <Target className="h-5 w-5" aria-hidden="true" />
@@ -102,27 +102,27 @@ const About = () => {
                 </div>
               </div>
 
-              <h3 className="mt-7 max-w-2xl font-heading text-2xl font-bold leading-tight text-heading sm:text-3xl lg:text-4xl">
+              <h3 className="mt-5 max-w-2xl font-heading text-2xl font-bold leading-tight text-heading sm:text-3xl">
                 Closing the cybersecurity awareness gap in Tier-2 India.
               </h3>
-              <p className="mt-6 max-w-2xl text-sm leading-7 text-foreground/60 sm:text-base">
-                Cyber Dravida trains students, conducts institutional outreach, and builds communities of future security professionals. Our work connects foundational awareness with hands-on learning so participants can understand threats, investigate responsibly, and defend with confidence.
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-foreground/60">
+                Cyber Dravida trains students, supports institutional outreach, and builds future security communities. We connect awareness with hands-on learning so people can understand threats, investigate responsibly, and defend with confidence.
               </p>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-foreground/55 sm:text-base">
-                Founded by Aniket Tegginamath, a TryHackMe Top 1% practitioner, CEH, and OSINT researcher, the organization works across colleges and institutions in Karnataka to make cybersecurity education practical and accessible.
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-foreground/55">
+                Founded by Aniket Tegginamath, a TryHackMe Top 1% practitioner, CEH, and OSINT researcher, we work across Karnataka to make cybersecurity education practical and accessible.
               </p>
 
-              <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-3">
+              <div className="mt-6 grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-3">
                 {organizationFacts.map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="bg-background/55 p-4 sm:p-5">
+                  <div key={label} className="bg-background/55 p-3.5 sm:p-4">
                     <Icon className="h-4 w-4 text-cyan-400" aria-hidden="true" />
-                    <p className="mt-3 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/30">{label}</p>
+                    <p className="mt-2 font-mono text-[8px] uppercase tracking-[0.16em] text-foreground/30">{label}</p>
                     <p className="mt-1 text-sm font-semibold text-foreground/75">{value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="#services"
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-blue-600 px-6 py-3 font-heading text-sm font-bold text-white shadow-[0_10px_30px_rgba(37,99,235,0.17)] transition hover:from-red-500 hover:to-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
@@ -140,8 +140,8 @@ const About = () => {
               </div>
             </div>
 
-            <div className="p-6 sm:p-8 lg:p-10 xl:p-12">
-              <div className="mb-7">
+            <div className="p-6 sm:p-7 lg:p-8 xl:p-9">
+              <div className="mb-4">
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-300/60">How We Operate</p>
                 <h3 className="mt-2 font-heading text-xl font-bold text-heading sm:text-2xl">Four Operating Principles</h3>
               </div>
@@ -153,30 +153,30 @@ const About = () => {
                   return (
                     <motion.div
                       key={principle.label}
-                      className="group flex gap-4 py-5 sm:gap-5"
+                      className="group flex gap-4 py-3.5 sm:gap-4"
                       initial={{ opacity: 0, x: reduceMotion ? 0 : 18 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true, amount: 0.5 }}
                       transition={{ duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : 0.14 + index * 0.07, ease: "easeOut" }}
                     >
-                      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:-translate-y-0.5 ${principle.iconClass}`}>
-                        <Icon className="h-5 w-5" aria-hidden="true" />
+                      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:-translate-y-0.5 ${principle.iconClass}`}>
+                        <Icon className="h-4 w-4" aria-hidden="true" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-4">
                           <h4 className="font-heading text-base font-semibold text-heading">{principle.label}</h4>
                           <span className={`font-mono text-[10px] font-semibold ${principle.color}`}>{principle.number}</span>
                         </div>
-                        <p className="mt-1.5 text-sm leading-relaxed text-foreground/50">{principle.desc}</p>
+                        <p className="mt-1 text-xs leading-relaxed text-foreground/50 sm:text-sm">{principle.desc}</p>
                       </div>
                     </motion.div>
                   );
                 })}
               </div>
 
-              <div className="mt-8 rounded-2xl border border-cyan-500/15 bg-cyan-500/[0.045] p-5">
-                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-cyan-300/60">Our Direction</p>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/55">
+              <div className="mt-5 flex flex-col gap-2 rounded-xl border border-cyan-500/15 bg-cyan-500/[0.045] p-4 sm:flex-row sm:items-center sm:gap-4">
+                <p className="shrink-0 font-mono text-[9px] uppercase tracking-[0.18em] text-cyan-300/60">Our Direction</p>
+                <p className="text-xs leading-relaxed text-foreground/55 sm:text-sm">
                   Build local cyber resilience today, then scale proven education and investigation practices across India.
                 </p>
               </div>
