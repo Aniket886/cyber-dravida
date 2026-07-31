@@ -41,14 +41,14 @@ const Blog = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="blog" className="relative overflow-hidden py-20 sm:py-24">
+    <section id="blog" className="relative overflow-hidden py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(148,163,184,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.45)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute -left-24 top-14 h-72 w-72 rounded-full bg-cyan-500/[0.04] blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-8 h-80 w-80 rounded-full bg-red-500/[0.04] blur-3xl" />
 
       <div className="container relative mx-auto px-4">
         <motion.div
-          className="mx-auto mb-10 flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
+          className="mx-auto mb-8 flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
           initial={{ opacity: 0, y: reduceMotion ? 0 : 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -84,7 +84,7 @@ const Blog = () => {
                 href={MEDIUM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group relative flex overflow-hidden rounded-2xl border p-6 shadow-[0_18px_55px_hsl(var(--background)/0.4)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_75px_hsl(var(--background)/0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:p-7 ${post.cardClass} ${post.featured ? "min-h-[27rem] lg:row-span-2" : "min-h-52"}`}
+                className={`group relative flex overflow-hidden rounded-2xl border p-5 shadow-[0_18px_55px_hsl(var(--background)/0.4)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_75px_hsl(var(--background)/0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:p-6 ${post.cardClass} ${post.featured ? "min-h-[24rem] lg:row-span-2" : "min-h-48"}`}
                 aria-label={`Read ${post.title} on Medium`}
                 initial={{ opacity: 0, y: reduceMotion ? 0 : 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -105,17 +105,17 @@ const Blog = () => {
                     <span className="font-heading text-5xl font-bold leading-none text-white/[0.055]">{post.number}</span>
                   </div>
 
-                  <div className={`mt-7 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.035] ${post.accent}`}>
+                  <div className={`mt-5 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.035] ${post.accent}`}>
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
-                  <h3 className={`mt-5 max-w-2xl font-heading font-bold leading-tight text-heading ${post.featured ? "text-2xl sm:text-3xl" : "text-xl"}`}>
+                  <h3 className={`mt-4 max-w-2xl font-heading font-bold leading-tight text-heading ${post.featured ? "text-2xl sm:text-3xl" : "text-xl"}`}>
                     {post.title}
                   </h3>
                   <p className={`mt-3 max-w-2xl flex-1 leading-relaxed text-foreground/55 ${post.featured ? "text-sm sm:text-base" : "text-sm"}`}>
                     {post.excerpt}
                   </p>
 
-                  <div className="mt-7 flex items-center justify-between border-t border-white/[0.07] pt-5">
+                  <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4">
                     <div>
                       <p className="font-mono text-[8px] uppercase tracking-[0.17em] text-foreground/25">Written by</p>
                       <p className="mt-1 text-xs font-medium text-foreground/55">Aniket Tegginamath</p>

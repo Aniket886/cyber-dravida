@@ -25,14 +25,14 @@ const Team = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="team" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="team" className="relative overflow-hidden py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(148,163,184,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.45)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-red-500/[0.045] blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-16 h-96 w-96 rounded-full bg-cyan-500/[0.055] blur-3xl" />
 
       <div className="container relative mx-auto px-4">
         <motion.div
-          className="mx-auto mb-14 max-w-3xl text-center sm:mb-16"
+          className="mx-auto mb-8 max-w-3xl text-center"
           initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -41,7 +41,7 @@ const Team = () => {
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-secondary">
             People Behind the Mission
           </p>
-          <h2 className="mt-4 bg-gradient-to-r from-red-300 via-heading to-cyan-300 bg-clip-text font-heading text-3xl font-bold text-transparent sm:text-4xl lg:text-5xl">
+          <h2 className="mt-3 bg-gradient-to-r from-red-300 via-heading to-cyan-300 bg-clip-text font-heading text-3xl font-bold text-transparent sm:text-4xl">
             Meet the Team
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-foreground/55 sm:text-base">
@@ -62,7 +62,7 @@ const Team = () => {
           <div className="absolute inset-0 opacity-[0.03] [background-image:linear-gradient(rgba(255,255,255,0.55)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.55)_1px,transparent_1px)] [background-size:30px_30px]" />
 
           <div className="relative grid lg:grid-cols-[0.38fr_0.62fr]">
-            <div className="relative flex min-h-80 items-center justify-center overflow-hidden border-b border-white/[0.07] p-8 lg:min-h-[36rem] lg:border-b-0 lg:border-r">
+            <div className="relative flex min-h-72 items-center justify-center overflow-hidden border-b border-white/[0.07] p-6 lg:min-h-[30rem] lg:border-b-0 lg:border-r">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(6,182,212,0.13),transparent_38%),linear-gradient(155deg,rgba(127,29,29,0.12),transparent_55%)]" />
               <div className="absolute left-8 top-8 font-mono text-[9px] uppercase tracking-[0.2em] text-red-300/55">
                 Founder Profile / 01
@@ -73,7 +73,7 @@ const Team = () => {
               <div className="relative">
                 <div className="absolute -inset-5 rounded-full bg-gradient-to-br from-red-500/20 via-transparent to-cyan-500/25 blur-xl" />
                 <div className="relative rounded-full bg-gradient-to-br from-red-500 via-slate-200/40 to-cyan-400 p-[2px] shadow-[0_18px_55px_rgba(6,182,212,0.15)]">
-                  <Avatar className="h-44 w-44 border-4 border-background sm:h-56 sm:w-56 lg:h-64 lg:w-64">
+                  <Avatar className="h-44 w-44 border-4 border-background sm:h-52 sm:w-52 lg:h-56 lg:w-56">
                     <AvatarImage src="/team/aniket.png" alt="Aniket Tegginamath" className="object-cover" />
                     <AvatarFallback className="bg-gradient-to-br from-red-600 to-cyan-600 font-heading text-4xl font-bold text-white">
                       AT
@@ -84,7 +84,7 @@ const Team = () => {
               </div>
             </div>
 
-            <div className="relative flex flex-col p-6 sm:p-8 lg:p-10 xl:p-12">
+            <div className="relative flex flex-col p-6 sm:p-7 lg:p-8">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <Badge className="border border-cyan-500/25 bg-cyan-500/10 text-cyan-300">
@@ -102,7 +102,7 @@ const Team = () => {
                 </div>
               </div>
 
-              <div className="mt-7 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {credentials.map((credential, index) => (
                   <span
                     key={credential}
@@ -117,13 +117,13 @@ const Team = () => {
                 ))}
               </div>
 
-              <p className="mt-7 max-w-3xl text-sm leading-7 text-foreground/60 sm:text-base">
+              <p className="mt-5 max-w-3xl text-sm leading-6 text-foreground/60 sm:text-base">
                 Aniket is a cybersecurity researcher, ethical hacking mentor, and founder of Cyber Dravida. His work spans OSINT, dark-web investigation, cybercrime analysis, and practical security education. He has trained more than 1,000 people and ranks in the top 1% globally on TryHackMe.
               </p>
 
-              <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-3">
+              <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-3">
                 {impact.map(({ value, label, icon: Icon }) => (
-                  <div key={label} className="bg-background/55 p-4 sm:p-5">
+                  <div key={label} className="bg-background/55 p-4">
                     <Icon className="h-4 w-4 text-cyan-400" aria-hidden="true" />
                     <p className="mt-3 font-heading text-xl font-bold text-heading">{value}</p>
                     <p className="mt-1 text-xs text-foreground/40">{label}</p>
@@ -131,7 +131,7 @@ const Team = () => {
                 ))}
               </div>
 
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 <a
                   href="https://tryhackme.com/p/D4rkMatrix"
                   target="_blank"
@@ -168,7 +168,7 @@ const Team = () => {
         </motion.article>
 
         <motion.div
-          className="mx-auto mt-8 flex max-w-6xl flex-col gap-5 rounded-2xl border border-white/[0.08] bg-card/45 p-5 backdrop-blur-lg sm:flex-row sm:items-center sm:justify-between sm:p-6"
+          className="mx-auto mt-5 flex max-w-6xl flex-col gap-4 rounded-2xl border border-white/[0.08] bg-card/45 p-5 backdrop-blur-lg sm:flex-row sm:items-center sm:justify-between"
           initial={{ opacity: 0, y: reduceMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}

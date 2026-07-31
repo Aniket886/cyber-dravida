@@ -94,14 +94,14 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden py-20 sm:py-24">
+    <section id="contact" className="relative overflow-hidden py-16">
       <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(148,163,184,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.45)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute -left-24 top-14 h-80 w-80 rounded-full bg-red-500/[0.04] blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-8 h-96 w-96 rounded-full bg-cyan-500/[0.05] blur-3xl" />
 
       <div className="container relative mx-auto px-4">
         <motion.div
-          className="mx-auto mb-12 max-w-3xl text-center"
+          className="mx-auto mb-8 max-w-3xl text-center"
           initial={{ opacity: 0, y: reduceMotion ? 0 : 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -128,8 +128,8 @@ const Contact = () => {
           <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-red-500 via-slate-200/30 to-cyan-400" />
 
           <div className="relative grid lg:grid-cols-[1.06fr_0.94fr]">
-            <div className="border-b border-white/[0.08] p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-9">
-              <div className="mb-7 flex items-start justify-between gap-5">
+            <div className="border-b border-white/[0.08] p-6 sm:p-7 lg:border-b-0 lg:border-r">
+              <div className="mb-5 flex items-start justify-between gap-5">
                 <div>
                   <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-red-300/60">Message Form</p>
                   <h3 className="mt-2 font-heading text-xl font-bold text-heading sm:text-2xl">Send us the details</h3>
@@ -141,7 +141,7 @@ const Contact = () => {
               </div>
 
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
                   <FormField
                     control={form.control}
@@ -176,7 +176,7 @@ const Contact = () => {
                       <FormItem>
                         <FormLabel className="text-xs text-foreground/60">Message</FormLabel>
                         <FormControl>
-                          <Textarea className="min-h-32 resize-y border-white/10 bg-background/45 focus-visible:ring-cyan-400" placeholder="Tell us what you would like to discuss..." rows={5} {...field} />
+                          <Textarea className="min-h-28 resize-y border-white/10 bg-background/45 focus-visible:ring-cyan-400" placeholder="Tell us what you would like to discuss..." rows={4} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -208,24 +208,24 @@ const Contact = () => {
                 </form>
               </Form>
 
-              <div className="mt-5 flex items-center gap-2 text-xs text-foreground/35">
+              <div className="mt-4 flex items-center gap-2 text-xs text-foreground/35">
                 <ShieldCheck className="h-4 w-4 text-cyan-400" aria-hidden="true" />
                 Protected by hCaptcha and submitted through Web3Forms.
               </div>
             </div>
 
-            <div className="flex flex-col p-6 sm:p-8 lg:p-9">
+            <div className="flex flex-col p-6 sm:p-7">
               <div>
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-300/60">Direct Channels</p>
                 <h3 className="mt-2 font-heading text-xl font-bold text-heading sm:text-2xl">Reach Cyber Dravida</h3>
                 <p className="mt-2 text-sm leading-relaxed text-foreground/45">Use the channel that best fits your enquiry.</p>
               </div>
 
-              <div className="mt-7 divide-y divide-white/[0.07] border-y border-white/[0.07]">
+              <div className="mt-5 divide-y divide-white/[0.07] border-y border-white/[0.07]">
                 {contactInfo.map((item) => {
                   const Icon = item.icon;
                   const content = (
-                    <div className="group flex items-center gap-4 py-4">
+                    <div className="group flex items-center gap-4 py-3">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/15 bg-cyan-500/[0.06] text-cyan-300 transition group-hover:bg-cyan-500/[0.11]">
                         <Icon className="h-4 w-4" aria-hidden="true" />
                       </span>
@@ -253,12 +253,12 @@ const Contact = () => {
                 })}
               </div>
 
-              <div className="relative mt-6 overflow-hidden rounded-2xl border border-cyan-500/15 bg-background/35">
+              <div className="relative mt-5 overflow-hidden rounded-2xl border border-cyan-500/15 bg-background/35">
                 <iframe
                   title="Cyber Dravida location in Davangere, Karnataka"
                   src="https://www.openstreetmap.org/export/embed.html?bbox=75.8950%2C14.4300%2C75.9500%2C14.5000&layer=mapnik&marker=14.4644%2C75.9218"
                   width="100%"
-                  height="190"
+                  height="160"
                   style={{ border: 0, filter: "invert(92%) hue-rotate(180deg) brightness(0.82) contrast(1.12)" }}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -269,7 +269,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/30">Follow the community</p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                   {socials.map((social) => (

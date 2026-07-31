@@ -69,14 +69,14 @@ const Services = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="services" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="services" className="relative overflow-hidden py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-0 opacity-[0.055] [background-image:linear-gradient(rgba(148,163,184,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.45)_1px,transparent_1px)] [background-size:42px_42px]" />
       <div className="pointer-events-none absolute left-[8%] top-20 h-72 w-72 rounded-full bg-red-500/[0.04] blur-3xl" />
       <div className="pointer-events-none absolute bottom-10 right-[8%] h-80 w-80 rounded-full bg-cyan-500/[0.05] blur-3xl" />
 
       <div className="container relative mx-auto px-4">
         <motion.div
-          className="mx-auto mb-14 max-w-3xl text-center sm:mb-16"
+          className="mx-auto mb-9 max-w-3xl text-center sm:mb-10"
           initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -85,7 +85,7 @@ const Services = () => {
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-secondary">
             Cyber Dravida Capabilities
           </p>
-          <h2 className="mt-4 bg-gradient-to-r from-red-300 via-heading to-cyan-300 bg-clip-text font-heading text-3xl font-bold text-transparent sm:text-4xl lg:text-5xl">
+          <h2 className="mt-3 bg-gradient-to-r from-red-300 via-heading to-cyan-300 bg-clip-text font-heading text-3xl font-bold text-transparent sm:text-4xl">
             Learn. Investigate. Defend.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-foreground/55 sm:text-base">
@@ -107,7 +107,7 @@ const Services = () => {
               >
                 <Link
                   to={`/services/${service.slug}`}
-                  className={`group relative flex h-full min-h-64 overflow-hidden rounded-2xl border p-6 shadow-[0_18px_55px_hsl(var(--background)/0.4)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:p-7 ${service.cardClass}`}
+                  className={`group relative flex h-full min-h-56 overflow-hidden rounded-2xl border p-5 shadow-[0_18px_55px_hsl(var(--background)/0.4)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:p-6 ${service.cardClass}`}
                   aria-label={`Explore ${service.title}`}
                 >
                   <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${service.lineClass}`} />
@@ -124,7 +124,7 @@ const Services = () => {
                       </span>
                     </div>
 
-                    <div className="mt-8 flex-1">
+                    <div className="mt-5 flex-1">
                       <p className={`font-mono text-[9px] font-semibold uppercase tracking-[0.22em] ${service.labelClass}`}>
                         {service.label}
                       </p>
@@ -132,7 +132,7 @@ const Services = () => {
                       <p className="mt-3 max-w-xl text-sm leading-relaxed text-foreground/55">{service.desc}</p>
                     </div>
 
-                    <div className="mt-7 flex items-center justify-between border-t border-white/[0.07] pt-5">
+                    <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4">
                       <span className={`font-heading text-sm font-semibold ${service.actionClass}`}>Explore capability</span>
                       <span className={`flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.035] transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 ${service.actionClass}`}>
                         <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
