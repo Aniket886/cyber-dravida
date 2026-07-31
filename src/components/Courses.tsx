@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { getCountdown } from "@/lib/countdown";
 import { getEnrollmentLink } from "@/lib/courseOffer";
+import UpcomingForensicsCourse from "@/components/UpcomingForensicsCourse";
 import Autoplay from "embla-carousel-autoplay";
 
 const fadeUp = (delay: number) => ({
@@ -591,6 +592,7 @@ const Courses = () => {
               <FeaturedCourseCard course={course} inView={inView} />
             </motion.div>
           ))}
+          <UpcomingForensicsCourse />
         </div>
 
         {/* Product Grid - Desktop/Tablet with pagination */}
