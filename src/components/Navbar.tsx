@@ -161,7 +161,9 @@ const Navbar = () => {
         <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon"><Menu className="h-5 w-5" /></Button>
+              <Button variant="ghost" size="icon" aria-label="Open navigation menu">
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              </Button>
             </SheetTrigger>
             <SheetContent side="top" className="bg-background border-b border-border pt-12">
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>

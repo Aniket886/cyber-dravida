@@ -740,8 +740,9 @@ const DesktopProductGrid = ({ products, inView }: { products: Product[]; inView:
             className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8"
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={page === 0}
+            aria-label="Previous product page"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={16} aria-hidden="true" />
           </Button>
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
@@ -759,8 +760,9 @@ const DesktopProductGrid = ({ products, inView }: { products: Product[]; inView:
             className="border-primary/30 text-primary hover:bg-primary/10 h-8 w-8"
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={page === totalPages - 1}
+            aria-label="Next product page"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={16} aria-hidden="true" />
           </Button>
         </div>
       )}
