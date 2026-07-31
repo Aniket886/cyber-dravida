@@ -311,11 +311,13 @@ const PriceDisplay = ({
   inView,
   large,
   promotional,
+  offensiveDefensive,
 }: {
   price: number;
   inView: boolean;
   large?: boolean;
   promotional?: boolean;
+  offensiveDefensive?: boolean;
 }) => {
   const count = usePriceCountUp(price, inView);
   const formatted = count.toLocaleString("en-IN");
@@ -323,7 +325,9 @@ const PriceDisplay = ({
 
   return (
     <span
-      className={`font-bold font-heading bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ${sizeClass}`}
+      className={`font-bold font-heading bg-gradient-to-r bg-clip-text text-transparent ${
+        offensiveDefensive ? "from-red-400 via-slate-100 to-blue-400" : "from-primary to-secondary"
+      } ${sizeClass}`}
     >
       ₹{formatted}
     </span>
@@ -345,7 +349,11 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
 
   const card = (
     <Card
-      className="group relative overflow-hidden border-white/[0.08] bg-card/70 shadow-[0_20px_60px_hsl(var(--background)/0.45)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_26px_80px_hsl(var(--background)/0.65),0_0_35px_hsl(var(--primary)/0.1)]"
+      className={`group relative overflow-hidden bg-card/70 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 ${
+        hasCourseDetails
+          ? "border-red-500/35 bg-[linear-gradient(112deg,rgba(127,29,29,0.16),hsl(var(--card)/0.82)_43%,rgba(30,64,175,0.16))] shadow-[0_20px_70px_hsl(var(--background)/0.55),-10px_0_38px_rgba(239,68,68,0.07),10px_0_38px_rgba(59,130,246,0.08)] hover:border-red-400/55 hover:shadow-[0_28px_85px_hsl(var(--background)/0.7),-14px_0_42px_rgba(239,68,68,0.12),14px_0_42px_rgba(59,130,246,0.13)]"
+          : "border-white/[0.08] shadow-[0_20px_60px_hsl(var(--background)/0.45)] hover:border-primary/35 hover:shadow-[0_26px_80px_hsl(var(--background)/0.65),0_0_35px_hsl(var(--primary)/0.1)]"
+      }`}
     >
       {hasCourseDetails && (
         <DialogTrigger asChild>
@@ -356,24 +364,68 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
           />
         </DialogTrigger>
       )}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
-      <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl transition-colors duration-500 group-hover:bg-secondary/10" />
-      <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-gradient-to-b from-primary via-secondary to-transparent" />
+      {hasCourseDetails ? (
+        <>
+          <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-red-500/45" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 rounded-r-[inherit] border-y border-r border-blue-500/55" />
+          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-red-500 via-slate-300/35 to-blue-500" />
+          <div className="absolute -left-24 -top-20 h-72 w-72 rounded-full bg-red-500/[0.09] blur-3xl transition-colors duration-500 group-hover:bg-red-500/[0.14]" />
+          <div className="absolute -right-24 -top-20 h-72 w-72 rounded-full bg-blue-500/[0.1] blur-3xl transition-colors duration-500 group-hover:bg-blue-500/[0.15]" />
+          <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-gradient-to-b from-red-400 via-red-500 to-transparent" />
+          <div className="absolute bottom-0 right-0 top-0 w-[2px] bg-gradient-to-b from-blue-400 via-blue-500 to-transparent" />
+        </>
+      ) : (
+        <>
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
+          <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl transition-colors duration-500 group-hover:bg-secondary/10" />
+          <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-gradient-to-b from-primary via-secondary to-transparent" />
+        </>
+      )}
       <CardContent className={`relative z-20 p-6 sm:p-8 ${hasCourseDetails ? "pointer-events-none" : ""}`}>
         <div className="mb-5 flex items-center justify-between gap-4">
-          <Badge className={`border-0 ${course.badgeClass}`}>{course.badge}</Badge>
+          <Badge
+            className={`border-0 ${
+              hasCourseDetails
+                ? "bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-[0_0_18px_rgba(59,130,246,0.18)]"
+                : course.badgeClass
+            }`}
+          >
+            {course.badge}
+          </Badge>
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/25">Cyber Dravida Academy</span>
         </div>
         <div className="grid gap-8 md:grid-cols-[1.08fr_0.92fr] lg:gap-12">
           <div className="space-y-4">
-            <Badge className="bg-secondary/20 text-secondary border-0">{course.tag}</Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge className={hasCourseDetails ? "border border-red-500/25 bg-red-500/10 text-red-300" : "border-0 bg-secondary/20 text-secondary"}>
+                {course.tag}
+              </Badge>
+              {hasCourseDetails && (
+                <>
+                  <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-red-300/70">Offensive</span>
+                  <span className="h-1 w-1 rounded-full bg-foreground/20" />
+                  <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-blue-300/75">Defensive</span>
+                </>
+              )}
+            </div>
             <h3 className="font-heading text-xl font-bold leading-tight text-heading sm:text-2xl">{course.title}</h3>
             <p className="text-foreground/60 text-sm leading-relaxed">{course.desc}</p>
             <ul className="space-y-2.5 border-y border-white/[0.06] py-4">
-              {course.features.map((feature) => (
+              {course.features.map((feature, featureIndex) => (
                 <li key={feature} className="flex items-start gap-2 text-sm text-foreground/80">
-                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <Check size={11} className="text-primary" />
+                  <span
+                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full ${
+                      hasCourseDetails
+                        ? featureIndex % 2 === 0
+                          ? "bg-red-500/10"
+                          : "bg-blue-500/10"
+                        : "bg-primary/10"
+                    }`}
+                  >
+                    <Check
+                      size={11}
+                      className={hasCourseDetails ? (featureIndex % 2 === 0 ? "text-red-400" : "text-blue-400") : "text-primary"}
+                    />
                   </span>
                   {feature}
                 </li>
@@ -388,33 +440,39 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
             </div>
             {course.disclaimer && (
               <div className="flex items-start gap-2 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
-                <ShieldCheck size={15} className="mt-0.5 shrink-0 text-secondary" />
+                <ShieldCheck size={15} className={`mt-0.5 shrink-0 ${hasCourseDetails ? "text-blue-400" : "text-secondary"}`} />
                 <span>{course.disclaimer}</span>
               </div>
             )}
             {hasCourseDetails && (
-              <span className="inline-flex items-center gap-2 font-heading text-sm font-semibold text-primary">
-                <BookOpen className="h-4 w-4" aria-hidden="true" />
+              <span className="inline-flex items-center gap-2 bg-gradient-to-r from-red-300 to-blue-300 bg-clip-text font-heading text-sm font-semibold text-transparent">
+                <BookOpen className="h-4 w-4 text-red-400" aria-hidden="true" />
                 Select card to explore the complete curriculum
               </span>
             )}
           </div>
-          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.07] bg-background/35 p-5 shadow-inner backdrop-blur-sm sm:p-6">
+          <div
+            className={`flex flex-col items-center justify-center gap-4 rounded-2xl p-5 shadow-inner backdrop-blur-sm sm:p-6 ${
+              hasCourseDetails
+                ? "border border-blue-500/25 bg-gradient-to-br from-red-950/25 via-background/45 to-blue-950/30"
+                : "border border-white/[0.07] bg-background/35"
+            }`}
+          >
             {course.promotion && promotionActive ? (
               <div className="flex flex-col items-center text-center">
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Early-Bird Price</span>
-                <PriceDisplay price={course.promotion.price} inView={inView} promotional />
+                <span className={`text-xs font-semibold uppercase tracking-[0.18em] ${hasCourseDetails ? "text-blue-300" : "text-secondary"}`}>Early-Bird Price</span>
+                <PriceDisplay price={course.promotion.price} inView={inView} promotional offensiveDefensive={hasCourseDetails} />
                 <span className="mt-1 text-sm text-muted-foreground">
                   Regular price <span className="line-through decoration-foreground/60">₹{course.price.toLocaleString("en-IN")}</span>
                 </span>
               </div>
             ) : (
-              <PriceDisplay price={course.price} inView={inView} large />
+              <PriceDisplay price={course.price} inView={inView} large offensiveDefensive={hasCourseDetails} />
             )}
             {course.promotion && promotionActive && (
-              <div className="w-full max-w-sm rounded-lg border border-secondary/35 bg-secondary/10 px-4 py-4 text-center">
-                <div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-secondary">
-                  <span className="h-2 w-2 rounded-full bg-secondary motion-safe:animate-pulse" />
+              <div className={`w-full max-w-sm rounded-lg px-4 py-4 text-center ${hasCourseDetails ? "border border-blue-500/30 bg-gradient-to-r from-red-500/[0.07] to-blue-500/[0.09]" : "border border-secondary/35 bg-secondary/10"}`}>
+                <div className={`flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] ${hasCourseDetails ? "text-blue-300" : "text-secondary"}`}>
+                  <span className={`h-2 w-2 rounded-full motion-safe:animate-pulse ${hasCourseDetails ? "bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.8)]" : "bg-secondary"}`} />
                   Early-bird offer ends in
                 </div>
                 <div
@@ -449,7 +507,14 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
                 <p className="mt-1 text-xs text-foreground/50">Standard course enrollment remains available.</p>
               </div>
             )}
-            <Button className="glow-btn pointer-events-auto relative z-20 w-full max-w-xs py-5 text-base" asChild>
+            <Button
+              className={`pointer-events-auto relative z-20 w-full max-w-xs py-5 text-base ${
+                hasCourseDetails
+                  ? "border-0 bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.2)] hover:from-red-500 hover:to-blue-500"
+                  : "glow-btn"
+              }`}
+              asChild
+            >
               <a href={enrollmentLink} target="_blank" rel="noopener noreferrer">
                 {promotionActive ? "Claim Early-Bird Access" : "Enroll Now"}
                 <ExternalLink size={16} className="ml-1" />
