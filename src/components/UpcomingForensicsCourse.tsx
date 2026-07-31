@@ -15,6 +15,7 @@ import {
   Search,
   ShieldAlert,
   Sparkles,
+  UserCheck,
   Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -29,11 +30,13 @@ import {
 
 const courseDetails = [
   { label: "Duration", value: "5 weeks", icon: Clock3 },
+  { label: "Total learning", value: "26+ hours", icon: BookOpen },
   { label: "Class time", value: "9:00 PM - 10:00 PM", icon: Radio },
   { label: "Delivery", value: "Live online", icon: MonitorPlay },
   { label: "Level", value: "Beginner - Intermediate", icon: GraduationCap },
   { label: "Language", value: "Kannada + English", icon: Users },
   { label: "Recordings", value: "Included", icon: BookOpen },
+  { label: "Pre-registered", value: "4 students", icon: UserCheck },
 ];
 
 const learningOutcomes = [
@@ -174,7 +177,7 @@ const UpcomingForensicsCourse = () => {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: reduceMotion ? 0 : 0.55, ease: "easeOut" }}
           whileHover={reduceMotion ? undefined : { y: -4 }}
-          aria-label="View details for Certified Cyber Forensic Investigation five-week course"
+          aria-label="View details for Cyber Forensics Investigation five-week course"
         >
           <div className="relative overflow-hidden rounded-[calc(1.4rem-1px)] bg-card/95 px-6 py-7 sm:px-8 sm:py-9">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_44%,hsl(var(--secondary)/0.16),transparent_30%),linear-gradient(110deg,transparent_15%,hsl(var(--primary)/0.05)_55%,transparent_80%)]" />
@@ -192,7 +195,7 @@ const UpcomingForensicsCourse = () => {
                   Live training in Kannada + English
                 </p>
                 <h3 className="mt-3 max-w-3xl font-heading text-2xl font-bold leading-tight text-heading sm:text-3xl">
-                  Certified Cyber Forensic Investigation
+                  Cyber Forensics Investigation
                 </h3>
                 <p className="mt-4 max-w-3xl text-sm leading-relaxed text-foreground/60 sm:text-base">
                   Build practical skills in cybercrime investigation, digital-evidence handling, and forensic analysis through a structured five-week live course.
@@ -201,7 +204,7 @@ const UpcomingForensicsCourse = () => {
                 <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-5 text-xs text-foreground/55 sm:text-sm">
                   <span className="flex items-center gap-2">
                     <Clock3 className="h-4 w-4 text-secondary" aria-hidden="true" />
-                    Five weeks
+                    Five weeks / 26+ hours
                   </span>
                   <span className="flex items-center gap-2">
                     <Radio className="h-4 w-4 text-secondary" aria-hidden="true" />
@@ -210,6 +213,10 @@ const UpcomingForensicsCourse = () => {
                   <span className="flex items-center gap-2">
                     <Search className="h-4 w-4 text-secondary" aria-hidden="true" />
                     Beginner - Intermediate
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <UserCheck className="h-4 w-4 text-secondary" aria-hidden="true" />
+                    4 students pre-registered
                   </span>
                 </div>
               </div>
@@ -251,7 +258,7 @@ const UpcomingForensicsCourse = () => {
               <Badge className="border border-white/10 bg-white/5 text-foreground/65">Five-Week Live Course</Badge>
             </div>
             <DialogTitle className="max-w-4xl font-heading text-2xl font-bold leading-tight text-heading sm:text-3xl lg:text-4xl">
-              Certified Cyber Forensic Investigation
+              Cyber Forensics Investigation
             </DialogTitle>
             <DialogDescription className="max-w-3xl pt-3 text-sm leading-relaxed text-foreground/60 sm:text-base">
               Learn cyber investigation in Kannada + English through practical demonstrations, guided exercises, case discussions, and structured forensic reporting.
