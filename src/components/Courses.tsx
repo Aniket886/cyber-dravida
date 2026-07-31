@@ -25,8 +25,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { getCountdown } from "@/lib/countdown";
 import { getEnrollmentLink } from "@/lib/courseOffer";
+import EthicalHackingCourseDetails from "@/components/EthicalHackingCourseDetails";
 import UpcomingForensicsCourse from "@/components/UpcomingForensicsCourse";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -332,6 +334,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
   const MetaIcon = course.metaIcon;
   const countdown = useCountdown(course.promotion?.endsAt);
   const promotionActive = Boolean(course.promotion && !countdown.isExpired);
+  const hasCourseDetails = course.tag === "Ethical Hacking";
   const enrollmentLink = getEnrollmentLink(course.link, course.promotion?.link, promotionActive);
   const countdownUnits = [
     { label: "Days", value: countdown.days },
@@ -340,14 +343,23 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
     { label: "Seconds", value: countdown.seconds },
   ];
 
-  return (
+  const card = (
     <Card
       className="group relative overflow-hidden border-white/[0.08] bg-card/70 shadow-[0_20px_60px_hsl(var(--background)/0.45)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_26px_80px_hsl(var(--background)/0.65),0_0_35px_hsl(var(--primary)/0.1)]"
     >
+      {hasCourseDetails && (
+        <DialogTrigger asChild>
+          <button
+            type="button"
+            className="absolute inset-0 z-10 cursor-pointer rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+            aria-label={`View full course details for ${course.title}`}
+          />
+        </DialogTrigger>
+      )}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
       <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl transition-colors duration-500 group-hover:bg-secondary/10" />
       <div className="absolute bottom-0 left-0 top-0 w-[2px] bg-gradient-to-b from-primary via-secondary to-transparent" />
-      <CardContent className="relative p-6 sm:p-8">
+      <CardContent className={`relative z-20 p-6 sm:p-8 ${hasCourseDetails ? "pointer-events-none" : ""}`}>
         <div className="mb-5 flex items-center justify-between gap-4">
           <Badge className={`border-0 ${course.badgeClass}`}>{course.badge}</Badge>
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-foreground/25">Cyber Dravida Academy</span>
@@ -379,6 +391,12 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
                 <ShieldCheck size={15} className="mt-0.5 shrink-0 text-secondary" />
                 <span>{course.disclaimer}</span>
               </div>
+            )}
+            {hasCourseDetails && (
+              <span className="inline-flex items-center gap-2 font-heading text-sm font-semibold text-primary">
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
+                Select card to explore the complete curriculum
+              </span>
             )}
           </div>
           <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.07] bg-background/35 p-5 shadow-inner backdrop-blur-sm sm:p-6">
@@ -431,7 +449,7 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
                 <p className="mt-1 text-xs text-foreground/50">Standard course enrollment remains available.</p>
               </div>
             )}
-            <Button className="glow-btn w-full max-w-xs text-base py-5" asChild>
+            <Button className="glow-btn pointer-events-auto relative z-20 w-full max-w-xs py-5 text-base" asChild>
               <a href={enrollmentLink} target="_blank" rel="noopener noreferrer">
                 {promotionActive ? "Claim Early-Bird Access" : "Enroll Now"}
                 <ExternalLink size={16} className="ml-1" />
@@ -442,6 +460,20 @@ const FeaturedCourseCard = ({ course, inView }: { course: FeaturedCourse; inView
         </div>
       </CardContent>
     </Card>
+  );
+
+  if (!hasCourseDetails) return card;
+
+  return (
+    <Dialog>
+      {card}
+      <EthicalHackingCourseDetails
+        enrollmentLink={enrollmentLink}
+        promotionActive={promotionActive}
+        promotionPrice={course.promotion?.price ?? course.price}
+        standardPrice={course.price}
+      />
+    </Dialog>
   );
 };
 
