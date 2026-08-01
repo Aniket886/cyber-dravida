@@ -84,7 +84,7 @@ const ImpactMetric = ({ stat, inView, reduceMotion }: { stat: (typeof stats)[num
       </div>
       <div className="mt-7">
         <p className={`font-heading text-4xl font-bold tracking-tight sm:text-5xl ${stat.accent}`}>
-          {count.toLocaleString("en-IN")}{stat.suffix}
+          {stat.staticValue ? String(stat.value) : count.toLocaleString("en-IN")}{stat.suffix}
         </p>
         <h3 className="mt-2 font-heading text-base font-semibold text-heading">{stat.label}</h3>
         <p className="mt-2 text-xs leading-relaxed text-foreground/45 sm:text-sm">{stat.detail}</p>
